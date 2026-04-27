@@ -44,7 +44,7 @@ export default function GatewayLanding() {
     line: '#D9CFB8',
   };
 
-  const FORM_URL = '[YOUR-FORM-URL]';
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwulLmtaB55wADoGW0nXgC9-p66LrGUmK1QlDPMU8-UmCQZg/viewform?usp=header';
 
   const steps = [
     {
@@ -608,7 +608,7 @@ export default function GatewayLanding() {
                   identity, and creativity actually look like in young people.
                 </p>
                 <p style={{ color: c.inkSoft, paddingTop: '0.5rem' }}>
-                  I&apos;m returning to Ho Chi Minh City this summer to run the founding cohort.{' '}
+                  Ho Chi Minh City is where it starts.{' '}
                   <a
                     href="https://www.linkedin.com/in/long-trinh-47b61042/"
                     target="_blank"

@@ -206,7 +206,7 @@ export default function GatewayDiscover() {
     chipBg: '#F5EDDA',
   };
 
-  const FORM_URL = '[YOUR-FORM-URL]';
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwulLmtaB55wADoGW0nXgC9-p66LrGUmK1QlDPMU8-UmCQZg/viewform?usp=header';
 
   const pathway = SAMPLE.pathway;
   const selectedTopics = useMemo(() => new Set(SAMPLE.topics), []);
