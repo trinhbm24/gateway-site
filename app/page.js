@@ -169,7 +169,7 @@ export default function GatewayLanding() {
       <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-24 md:pb-40">
         <div className="max-w-7xl mx-auto">
           <div className="gw-rise gw-d1 text-xs uppercase mb-10" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
-            — Founding Cohort · Summer 2026 · Ho Chi Minh City
+            — Founding Cohort · Summer 2026 · Starting in Ho Chi Minh City
           </div>
           <h1
             className="gw-rise gw-d2 text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] mb-12 max-w-5xl"
@@ -183,8 +183,8 @@ export default function GatewayLanding() {
             className="gw-rise gw-d3 text-lg md:text-xl max-w-2xl mb-12 leading-relaxed"
             style={{ color: c.inkSoft, fontWeight: 400 }}
           >
-            Gateway matches students in Ho Chi Minh City with vetted community partners
-            for eight-week, co-designed projects. Real outcomes for organizations.
+            Gateway matches students with vetted community organizations for eight-week,
+            co-designed projects, beginning in Ho Chi Minh City. Real outcomes for organizations.
             Real growth for students. Documented results for schools and parents.
           </p>
           <div className="gw-rise gw-d4 flex flex-col sm:flex-row gap-3">
