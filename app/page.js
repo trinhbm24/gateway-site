@@ -122,7 +122,8 @@ export default function GatewayLanding() {
         }}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 flex justify-between items-center">
-          <a href="#" className="flex items-baseline gap-2">
+          <a href="#" className="flex items-center gap-3">
+            <img src="/gateway-logo.png" alt="Gateway" className="h-8 w-8 object-contain" />
             <span className="text-2xl" style={{ fontFamily: serif, fontWeight: 500, color: c.ink }}>
               Gateway
             </span>
@@ -567,18 +568,13 @@ export default function GatewayLanding() {
               className="text-3xl md:text-5xl mb-16 leading-[1.1]"
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
-              I am the student<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Gateway should have existed for.</span>
+              Built from lived experience.<br />
+              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Designed for real outcomes.</span>
             </h2>
 
             <div className="grid md:grid-cols-12 gap-10 lg:gap-16">
               <div className="md:col-span-4">
-                <div
-                  className="aspect-[4/5] flex items-center justify-center text-xs uppercase"
-                  style={{ background: c.accentSoft, color: c.inkSoft, letterSpacing: '0.22em', fontWeight: 500 }}
-                >
-                  [ Founder Portrait ]
-                </div>
+                <img src="/long.jpg" alt="Long Trinh" className="w-full aspect-[4/5] object-cover" />
                 <div className="mt-6">
                   <div className="text-xl mb-1" style={{ fontFamily: serif, fontWeight: 500 }}>
                     Long Trinh
@@ -594,28 +590,29 @@ export default function GatewayLanding() {
 
               <div className="md:col-span-8 space-y-6 text-lg leading-relaxed" style={{ color: c.ink }}>
                 <p>
-                  I&apos;m a Saigon South International School graduate. I completed 150 hours
-                  of service learning at orphanages, teaching English. I have no idea
-                  whether any of it mattered — for the children, for the organization, or
-                  for me. There was no structure, no scaffolding, no measurement.
+                  I&apos;m a Saigon South International School graduate. Junior year, I spent
+                  Saturdays teaching English at orphanages in District 4. I had no curriculum,
+                  no continuity, no way to measure whether any of it stuck. By the end of the
+                  year, I knew the answer: it hadn&apos;t.
                 </p>
                 <p>
-                  That experience is universal. Every international school student I know
-                  finished with the same feeling. Every community organization I&apos;ve spoken
-                  to in HCMC has the same complaint: students arrive unprepared, leave
-                  without follow-through, and rarely deliver real value.
+                  Senior year, I tried something else. A few classmates and I started a club
+                  called Bliss 4 Youth that worked with the children of our school&apos;s local
+                  staff. We met weekly, built a real curriculum, and tracked progress over the
+                  year. Every student left with improved English.
                 </p>
                 <p>
-                  Gateway is the rebuild. The platform is grounded in deeper learning
-                  research from my work at Harvard&apos;s Graduate School of Education with
-                  Jal Mehta and Sarah Fine — the framework that defines what mastery,
+                  That&apos;s the difference Gateway is built to scale. The platform is grounded
+                  in deeper learning research from my studies at Harvard&apos;s Graduate School
+                  of Education with Jal Mehta — the framework that defines what mastery,
                   identity, and creativity actually look like in young people.
                 </p>
                 <p style={{ color: c.inkSoft, paddingTop: '0.5rem' }}>
-                  I&apos;m returning to Ho Chi Minh City this summer to run the founding cohort
-                  in person.{' '}
+                  I&apos;m returning to Ho Chi Minh City this summer to run the founding cohort.{' '}
                   <a
-                    href="[YOUR-LINKEDIN]"
+                    href="https://www.linkedin.com/in/long-trinh-47b61042/"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="gw-link"
                     style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px' }}
                   >
@@ -623,11 +620,11 @@ export default function GatewayLanding() {
                   </a>{' '}
                   ·{' '}
                   <a
-                    href="mailto:[YOUR-EMAIL]"
+                    href="mailto:long_trinh@gse.harvard.edu"
                     className="gw-link"
                     style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px' }}
                   >
-                    [YOUR-EMAIL]
+                    long_trinh@gse.harvard.edu
                   </a>
                 </p>
               </div>
