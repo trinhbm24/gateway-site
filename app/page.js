@@ -306,7 +306,7 @@ export default function GatewayLanding() {
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
               Eight weeks. One project.<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Measurable.</span>
+              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Measurable Outcomes.</span>
             </h2>
 
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-12">
