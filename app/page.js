@@ -51,25 +51,25 @@ export default function GatewayLanding() {
       num: '01',
       title: 'Discover',
       text:
-        "Students complete a structured assessment of their interests, skills, growth goals, and competency baseline — grounded in deeper learning research from Harvard's Graduate School of Education.",
+        'Students complete a structured assessment that maps interests, skills, and growth goals to the deeper learning competencies — mastery, identity, and creativity — drawn from Mehta and Fine’s Harvard research.',
     },
     {
       num: '02',
       title: 'Match',
       text:
-        'We pair each student with vetted HCMC community partners whose actual operational needs align with what the student wants to develop. Manual matching by the founder for every founding cohort placement.',
+        'We pair each student with vetted HCMC community partners whose actual operational needs align with what the student wants to develop. Founding cohort matching is hand-curated by the founder — turning every placement into structured training data for our matching model.',
     },
     {
       num: '03',
       title: 'Co-design',
       text:
-        'Student and partner sit down together and scope a real eight-week project. Our AI-scaffolded tool surfaces the tensions between what the student wants to learn and what the organization actually needs.',
+        'Student and partner sit down together and scope a real eight-week project. Our co-design tool surfaces the tensions between what the student wants to learn and what the organization actually needs — turning that conversation into a structured project brief.',
     },
     {
       num: '04',
       title: 'Document',
       text:
-        'Weekly reflections, competency tracking, partner feedback, and a final narrative report that schools, parents, and college admissions committees can actually evaluate.',
+        'Weekly reflections, competency tracking, partner feedback, and a final narrative report — turning service learning work into evidence that schools, parents, and college admissions committees can actually use.',
     },
   ];
 
@@ -306,7 +306,7 @@ export default function GatewayLanding() {
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
               Eight weeks. One project.<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Documented growth.</span>
+              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Measurable.</span>
             </h2>
 
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-12">
