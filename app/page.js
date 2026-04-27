@@ -351,16 +351,16 @@ export default function GatewayLanding() {
               className="text-3xl md:text-5xl leading-[1.1] mb-10 max-w-4xl"
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
-              Most matching tools stop at logistics.<br />
+              Service learning usually ends with a placement.<br />
               <span style={{ fontStyle: 'italic', fontWeight: 400, color: c.accentSoft }}>
-                Ours starts where the learning actually happens.
+                Gateway begins there.
               </span>
             </h2>
             <p className="text-lg leading-relaxed mb-12 max-w-3xl" style={{ color: '#C9C2B8' }}>
-              The Gateway co-design tool walks a student and a community partner through
-              their actual tensions — what the student wants to grow into, what the
-              organization actually needs done — and turns that conversation into a
-              structured project brief. Walk through it now.
+              Our co-design tool keeps going, guiding the student and the organization
+              through the project they'll actually do together, the outcomes they'll both
+              work toward, and the brief that anchors the partnership. Both sides end with
+              something measurable.
             </p>
             <a
               href="/co-design"
@@ -372,7 +372,7 @@ export default function GatewayLanding() {
                 letterSpacing: '0.2em',
               }}
             >
-              Open the Co-design Tool →
+              Walk through it →
             </a>
           </div>
         </div>
