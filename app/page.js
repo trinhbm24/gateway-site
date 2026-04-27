@@ -252,29 +252,29 @@ export default function GatewayLanding() {
               className="text-3xl md:text-5xl mb-12 leading-[1.1]"
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
-              Service hours don&apos;t teach.<br />
+              Service requirements don&apos;t teach.<br />
               <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Real projects do.</span>
             </h2>
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 text-lg leading-relaxed" style={{ color: c.inkSoft }}>
               <p>
-                Every IB and most international schools require service learning. Students
-                at top institutions complete 150 or more hours over their high school
-                years. The intent is real — service learning is meant to build empathy,
-                leadership, and agency.
+                Every IB and most international schools require service learning.
+                The intent is real — service learning is meant to build empathy,
+                leadership, and the kind of agency and future ready skills that
+                classrooms can&apos;t teach on their own.
               </p>
               <p>
                 The execution isn&apos;t. Matching is informal. Scaffolding is missing. Outcomes
                 go undocumented. Schools spend tens of thousands on coordinator time.
-                Parents pay tuition that includes service learning. Students fill hours
-                instead of growing from them.
+                Parents pay tuition that covers it. Students fill obligations and &ldquo;check
+                the box&rdquo; instead of growing from them.
               </p>
             </div>
 
             <div className="mt-16 pt-12 grid md:grid-cols-3 gap-8" style={{ borderTop: `1px solid ${c.line}` }}>
               {[
-                ['150+', 'Hours required to graduate from most international schools'],
-                ['Unmeasured', 'Whether any of those hours produce learning'],
-                ['One', 'Founder who lived this and is rebuilding the category'],
+                ['Required', 'Service learning is mandatory at every IB and most international schools worldwide'],
+                ['Unstructured', 'Most placements have no scaffolding or measurable outcomes'],
+                ['Underbuilt', 'A core graduation requirement at thousands of schools and almost no one is building tools for it'],
               ].map(([stat, label]) => (
                 <div key={label}>
                   <div className="text-5xl mb-3" style={{ fontFamily: serif, fontWeight: 300, color: c.accent }}>
