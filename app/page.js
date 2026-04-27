@@ -75,7 +75,7 @@ export default function GatewayLanding() {
 
   const includes = [
     'Eight-week structured placement with a vetted community partner',
-    'Weekly one-on-one mentorship with the founder',
+    'Weekly 1:1 mentorship with the founder',
     'AI-scaffolded co-design and reflection tools',
     'Competency tracking across three growth dimensions',
     'Final narrative report for schools and college applications',
@@ -405,15 +405,14 @@ export default function GatewayLanding() {
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
             <div className="lg:col-span-7">
               <p className="text-lg leading-relaxed mb-6" style={{ color: c.inkSoft }}>
-                The founding cohort runs in person in Ho Chi Minh City from June through
+                The founding cohort runs in person in Ho Chi Minh City from July through
                 August 2026. Each student is matched with a vetted community partner and
                 works through a structured eight-week placement — with weekly mentorship
                 from the founder, scaffolded reflection, competency tracking, and a final
                 narrative report.
               </p>
               <p className="text-lg leading-relaxed mb-12" style={{ color: c.inkSoft }}>
-                Founding families also receive priority placement in subsequent cohorts,
-                sibling enrollment privileges, and named recognition as program founders.
+                Founding families also receive priority placement in subsequent cohorts and sibling enrollment privileges.
               </p>
 
               <div
@@ -462,7 +461,7 @@ export default function GatewayLanding() {
                         fontSize: '4.5rem',
                       }}
                     >
-                      $1,500
+                      $2,000
                     </span>
                     <span className="text-sm" style={{ color: c.inkMuted }}>
                       USD
@@ -492,9 +491,9 @@ export default function GatewayLanding() {
                     className="text-xs leading-relaxed"
                     style={{ color: c.inkSoft }}
                   >
-                    Reservations are non-binding. We confirm program details and final
-                    partner placements by mid-May 2026. Tuition is collected only after
-                    final confirmation.
+                    A $150 reservation fee secures your founding cohort spot, fully
+                    refundable until your student is matched with a confirmed partner in
+                    mid-June 2026. Full tuition is collected before the cohort begins.
                   </p>
                 </div>
               </div>
