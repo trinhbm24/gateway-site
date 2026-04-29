@@ -123,7 +123,7 @@ export default function GatewayLanding() {
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 flex justify-between items-center">
           <a href="#" className="flex items-center gap-3">
-            <img src="/gateway-logo.png" alt="Gateway" className="h-8 w-8 object-contain" />
+            <img src="/gateway-logo.png" alt="Gateway" className="h-12 w-12 object-contain" />
             <span className="text-2xl" style={{ fontFamily: serif, fontWeight: 500, color: c.ink }}>
               Gateway
             </span>
@@ -591,7 +591,7 @@ export default function GatewayLanding() {
               <div className="md:col-span-8 space-y-6 text-lg leading-relaxed" style={{ color: c.ink }}>
                 <p>
                   I&apos;m a Saigon South International School graduate. Junior year, I spent
-                  Saturdays teaching English at orphanages in District 4. I had no curriculum,
+                  Saturdays teaching English at orphanages around Ho Chi Minh City. I had no curriculum,
                   no continuity, no way to measure whether any of it stuck. By the end of the
                   year, I knew the answer: it hadn&apos;t.
                 </p>

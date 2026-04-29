@@ -101,8 +101,8 @@ const ORGS = [
     description:
       'National foundation operating eight programs across health, education, and community development. Founding learning lab partner of Gateway.',
     location: 'District 1, Ho Chi Minh City',
-    mode: 'Remote',
-    modeDetail: 'Project-based, optional site visits',
+    mode: 'Hybrid',
+    modeDetail: 'Project-based, regular site visits',
     needsNow: true,
     weights: {
       topics: {
@@ -557,10 +557,7 @@ export default function GatewayDiscover() {
 
               <div className="mb-16">
                 <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>
-                  Prior experience{' '}
-                  <span style={{ textTransform: 'none', letterSpacing: 0, color: c.inkMuted, fontWeight: 400 }}>
-                    — optional
-                  </span>
+                  Prior experience
                 </div>
                 <div className="text-sm mb-6" style={{ color: c.inkSoft }}>
                   Any clubs, projects, or volunteer work that shaped how you think about service?
