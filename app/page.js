@@ -223,7 +223,7 @@ export default function GatewayLanding() {
               ['8 weeks', 'Summer 2026'],
               ['10–15', 'Founding students'],
               ['Vetted', 'Community partners'],
-              ['HGSE', 'Research-grounded'],
+              ['Harvard GSE', 'Research-grounded'],
             ].map(([big, small]) => (
               <div key={small}>
                 <div className="text-2xl mb-1" style={{ fontFamily: serif, fontWeight: 400, color: c.ink }}>
