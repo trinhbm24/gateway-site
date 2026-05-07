@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
+import { WALKTHROUGH_ORGS, DEFAULT_ORG_ID } from '../../lib/walkthroughOrgs';
 
 /**
  * Gateway Co-design Tool — Product Walkthrough
- * Lives at /co-design (because this file is at app/co-design/page.js)
+ * Lives at /co-design
  */
 
 const TOPICS = [
@@ -31,23 +32,14 @@ const ORGS = [
     name: "Saigon Children's Charity",
     initials: 'SC',
     category: 'Education · Youth Development',
-    description:
-      'Removes barriers to education for disadvantaged Vietnamese children — scholarships, school infrastructure, vocational training. Operating since 1992.',
+    description: 'Removes barriers to education for disadvantaged Vietnamese children — scholarships, school infrastructure, vocational training. Operating since 1992.',
     location: 'District 1, Ho Chi Minh City',
     mode: 'Hybrid',
     modeDetail: 'Weekly onsite + remote project work',
     needsNow: true,
     weights: {
-      topics: {
-        'Education & Youth': 1.0,
-        'Community Development': 0.7,
-        'Children & Welfare': 0.8,
-        'Arts & Culture': 0.5,
-      },
-      skills: {
-        Writing: 0.9, Teaching: 1.0, Leadership: 0.7,
-        Outreach: 0.7, Translation: 0.7, Research: 0.5, Design: 0.5,
-      },
+      topics: { 'Education & Youth': 1.0, 'Community Development': 0.7, 'Children & Welfare': 0.8, 'Arts & Culture': 0.5 },
+      skills: { Writing: 0.9, Teaching: 1.0, Leadership: 0.7, Outreach: 0.7, Translation: 0.7, Research: 0.5, Design: 0.5 },
     },
   },
   {
@@ -55,20 +47,14 @@ const ORGS = [
     name: "Blue Dragon Children's Foundation",
     initials: 'BD',
     category: 'Child Welfare · Anti-Trafficking',
-    description:
-      "Rescues and supports children from trafficking, forced labor, and slavery. Expanded to HCMC in 2024 in partnership with the city's Association for Child Rights.",
+    description: "Rescues and supports children from trafficking, forced labor, and slavery. Expanded to HCMC in 2024 in partnership with the city's Association for Child Rights.",
     location: 'District 2, Ho Chi Minh City',
     mode: 'Onsite',
     modeDetail: 'Background check + safeguarding training required',
     needsNow: false,
     weights: {
-      topics: {
-        'Children & Welfare': 1.0, 'Justice & Human Rights': 1.0,
-        'Education & Youth': 0.6, 'Health & Wellbeing': 0.5,
-      },
-      skills: {
-        Research: 0.9, Writing: 0.8, Translation: 1.0, Data: 0.7, Design: 0.5,
-      },
+      topics: { 'Children & Welfare': 1.0, 'Justice & Human Rights': 1.0, 'Education & Youth': 0.6, 'Health & Wellbeing': 0.5 },
+      skills: { Research: 0.9, Writing: 0.8, Translation: 1.0, Data: 0.7, Design: 0.5 },
     },
   },
   {
@@ -76,20 +62,14 @@ const ORGS = [
     name: 'VinaCapital Foundation',
     initials: 'VC',
     category: 'Health · Education',
-    description:
-      'National foundation operating eight programs across health, education, and community development. Founding learning lab partner of Gateway.',
+    description: 'National foundation operating eight programs across health, education, and community development. Founding learning lab partner of Gateway.',
     location: 'District 1, Ho Chi Minh City',
     mode: 'Hybrid',
     modeDetail: 'Project-based, regular site visits',
     needsNow: true,
     weights: {
-      topics: {
-        'Health & Wellbeing': 1.0, 'Education & Youth': 0.9,
-        'Community Development': 0.8, 'Technology & Innovation': 0.6,
-      },
-      skills: {
-        Research: 1.0, Data: 0.9, Writing: 0.7, Design: 0.7, Leadership: 0.6,
-      },
+      topics: { 'Health & Wellbeing': 1.0, 'Education & Youth': 0.9, 'Community Development': 0.8, 'Technology & Innovation': 0.6 },
+      skills: { Research: 1.0, Data: 0.9, Writing: 0.7, Design: 0.7, Leadership: 0.6 },
     },
   },
 ];
@@ -99,48 +79,29 @@ const SAMPLE = {
   topics: ['education', 'children'],
   skills: ['Writing', 'Teaching', 'Leadership'],
   hours: '5–8 hrs',
-  priorExp:
-    "I taught English at orphanages in District 4 for two summers in middle school. I learned that good intentions aren't enough — I want to learn how to actually be useful this time.",
+  priorExp: "I taught English at orphanages in District 4 for two summers in middle school. I learned that good intentions aren't enough — I want to learn how to actually be useful this time.",
 };
 
 function calculateMatch(org, selectedTopics, selectedSkills) {
-  let topicScore = 0;
-  let topicMatches = 0;
+  let topicScore = 0, topicMatches = 0;
   selectedTopics.forEach((tId) => {
     const label = TOPICS.find((x) => x.id === tId)?.label;
-    if (label && org.weights.topics[label]) {
-      topicScore += org.weights.topics[label];
-      topicMatches += 1;
-    }
+    if (label && org.weights.topics[label]) { topicScore += org.weights.topics[label]; topicMatches++; }
   });
   const avgTopic = topicMatches > 0 ? topicScore / topicMatches : 0.4;
-
-  let skillScore = 0;
-  let skillMatches = 0;
+  let skillScore = 0, skillMatches = 0;
   selectedSkills.forEach((s) => {
-    if (org.weights.skills[s]) {
-      skillScore += org.weights.skills[s];
-      skillMatches += 1;
-    }
+    if (org.weights.skills[s]) { skillScore += org.weights.skills[s]; skillMatches++; }
   });
   const avgSkill = skillMatches > 0 ? skillScore / skillMatches : 0.4;
-
-  const score = 50 + avgTopic * 30 + avgSkill * 19;
-  return Math.min(99, Math.max(52, Math.round(score)));
+  return Math.min(99, Math.max(52, Math.round(50 + avgTopic * 30 + avgSkill * 19)));
 }
 
 function generateReasoning(org, selectedTopics, selectedSkills) {
-  const topicLabels = Array.from(selectedTopics)
-    .map((t) => TOPICS.find((x) => x.id === t)?.label)
-    .filter(Boolean);
+  const topicLabels = Array.from(selectedTopics).map((t) => TOPICS.find((x) => x.id === t)?.label).filter(Boolean);
   const topTopic = topicLabels.find((t) => (org.weights.topics[t] || 0) >= 0.8);
-  const topSkill = Array.from(selectedSkills).find(
-    (s) => (org.weights.skills[s] || 0) >= 0.8,
-  );
-
-  if (topTopic && topSkill) {
-    return `Your interest in ${topTopic.toLowerCase()} aligns with their core mission, and your ${topSkill.toLowerCase()} skills match what they actively need from volunteers.`;
-  }
+  const topSkill = Array.from(selectedSkills).find((s) => (org.weights.skills[s] || 0) >= 0.8);
+  if (topTopic && topSkill) return `Your interest in ${topTopic.toLowerCase()} aligns with their core mission, and your ${topSkill.toLowerCase()} skills match what they actively need from volunteers.`;
   if (topTopic) return `Your interest in ${topTopic.toLowerCase()} aligns directly with their core mission.`;
   if (topSkill) return `Your ${topSkill.toLowerCase()} skills match what they're actively looking for in volunteers right now.`;
   return 'A foundational fit based on your assessment profile and their current project openings.';
@@ -151,8 +112,7 @@ export default function GatewayDiscover() {
     if (typeof document === 'undefined') return;
     const fontLink = document.createElement('link');
     fontLink.rel = 'stylesheet';
-    fontLink.href =
-      'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=DM+Sans:wght@300;400;500;600&display=swap';
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=DM+Sans:wght@300;400;500;600&display=swap';
     document.head.appendChild(fontLink);
     return () => { if (document.head.contains(fontLink)) document.head.removeChild(fontLink); };
   }, []);
@@ -161,74 +121,57 @@ export default function GatewayDiscover() {
   const sans = "'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif";
 
   const c = {
-    bg: '#FAF6EE',
-    bgDeep: '#F1E9D6',
-    ink: '#1A1714',
-    inkSoft: '#5D5550',
-    inkMuted: '#8A8278',
-    accent: '#A8462C',
-    accentSoft: '#E8D4C2',
-    line: '#D9CFB8',
-    chipBg: '#F5EDDA',
+    bg: '#FAF6EE', bgDeep: '#F1E9D6', ink: '#1A1714', inkSoft: '#5D5550',
+    inkMuted: '#8A8278', accent: '#A8462C', accentSoft: '#E8D4C2', line: '#D9CFB8', chipBg: '#F5EDDA',
+    sageBg: '#EDF2E8',   // light olive for Sage assessment tab
   };
 
   const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwulLmtaB55wADoGW0nXgC9-p66LrGUmK1QlDPMU8-UmCQZg/viewform?usp=header';
 
-  const pathway = SAMPLE.pathway;
   const selectedTopics = useMemo(() => new Set(SAMPLE.topics), []);
   const selectedSkills = useMemo(() => new Set(SAMPLE.skills), []);
-  const hours = SAMPLE.hours;
-  const priorExp = SAMPLE.priorExp;
 
   const [step, setStep] = useState(1);
-  const [chosenOrg, setChosenOrg] = useState(null);
+  const [chosenOrgId, setChosenOrgId] = useState(DEFAULT_ORG_ID);
   const [orgReviewState, setOrgReviewState] = useState('waiting');
+  const [proposeTab, setProposeTab] = useState('rubric'); // 'rubric' | 'sage'
+
+  // Derived org data
+  const org = WALKTHROUGH_ORGS[chosenOrgId] || WALKTHROUGH_ORGS[DEFAULT_ORG_ID];
 
   const matches = useMemo(() => {
-    return ORGS
-      .map((org) => ({
-        ...org,
-        matchScore: calculateMatch(org, selectedTopics, selectedSkills),
-        reasoning: generateReasoning(org, selectedTopics, selectedSkills),
-      }))
-      .sort((a, b) => b.matchScore - a.matchScore);
+    return ORGS.map((o) => ({
+      ...o,
+      matchScore: calculateMatch(o, selectedTopics, selectedSkills),
+      reasoning: generateReasoning(o, selectedTopics, selectedSkills),
+    })).sort((a, b) => b.matchScore - a.matchScore);
   }, [selectedTopics, selectedSkills]);
 
-  const stepLabels = ['Pathway', 'Assessment', 'Matches', 'Select', 'Propose', 'Schedule', 'Org Review', 'Meeting', 'Final'];
   const TOTAL_STEPS = 9;
+  const stepLabels = ['Pathway', 'Assessment', 'Matches', 'Select', 'Propose', 'Schedule', 'Org Review', 'Meeting', 'Final'];
 
-  const goNext = () => {
-    setStep((s) => Math.min(s + 1, TOTAL_STEPS));
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  const goBack = () => {
-    setStep((s) => Math.max(s - 1, 1));
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-  const restart = () => {
-    setStep(1);
-    setChosenOrg(null);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollTop = () => { if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }); };
+  const goNext = () => { setStep((s) => Math.min(s + 1, TOTAL_STEPS)); scrollTop(); };
+  const goBack = () => { setStep((s) => Math.max(s - 1, 1)); scrollTop(); };
+  const restart = () => { setStep(1); setChosenOrgId(DEFAULT_ORG_ID); setOrgReviewState('waiting'); setProposeTab('rubric'); scrollTop(); };
 
-  const goToSelect = (orgId) => {
-    setChosenOrg(orgId || matches[0].id);
+  const selectOrg = (orgId) => {
+    setChosenOrgId(orgId || DEFAULT_ORG_ID);
     setStep(4);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollTop();
   };
-
-  const selectedOrg = matches.find((m) => m.id === chosenOrg) || matches[0];
 
   // Shared button styles
-  const btnPrimary = {
-    background: c.accent, color: c.bg, fontWeight: 500,
-    letterSpacing: '0.2em', border: 'none', fontFamily: sans,
-  };
-  const btnOutline = {
-    background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`,
-    fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans,
-  };
+  const btnPrimary = { background: c.accent, color: c.bg, fontWeight: 500, letterSpacing: '0.2em', border: 'none', fontFamily: sans };
+  const btnOutline = { background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`, fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans };
   const btnClass = 'px-8 py-4 text-xs uppercase tracking-widest gw-cta';
+
+  const CRITERIA = [
+    { key: 'claim', label: 'Claim', desc: 'State clearly what you want to do and why it matters. Name a concrete action — not a vague intention.' },
+    { key: 'contribution', label: 'Contribution', desc: 'Show what unique skills, experience, or perspective you bring. Be concrete — this is not the place to be modest.' },
+    { key: 'commitment', label: 'Commitment', desc: 'Be specific about your hours, schedule, and what you can realistically deliver across eight weeks.' },
+    { key: 'closing', label: 'Closing', desc: 'Name one measurable outcome. What will be true by the end that wasn\'t true at the start?' },
+  ];
 
   return (
     <div style={{ fontFamily: sans, background: c.bg, color: c.ink, minHeight: '100vh', WebkitFontSmoothing: 'antialiased' }}>
@@ -239,9 +182,9 @@ export default function GatewayDiscover() {
         .gw-card:hover { transform: translateY(-2px); }
         .gw-cta { transition: background 0.2s, color 0.2s; cursor: pointer; }
         .gw-cta-primary:hover { background: #8E3923 !important; }
-        .gw-cta-dark:hover { background: #2C2521 !important; }
         .gw-cta-outline:hover { background: ${c.ink} !important; color: ${c.bg} !important; }
         .slot-available:hover { border-color: ${c.accent} !important; cursor: pointer; }
+        .org-select-btn:hover { background: ${c.ink} !important; color: ${c.bg} !important; }
       `}</style>
 
       {/* Nav */}
@@ -261,24 +204,24 @@ export default function GatewayDiscover() {
         <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
           <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>Product Walkthrough</span>
           <span style={{ color: c.inkSoft }}>·</span>
-          <span style={{ color: c.ink, fontWeight: 400 }}>Sample student journey from intake to final proposal. Use Continue and Back to step through.</span>
+          <span style={{ color: c.ink, fontWeight: 400 }}>
+            Sample student journey from intake to final proposal. Use Continue and Back to step through, or click any partner on Matches to see how the flow adapts.
+          </span>
         </div>
       </div>
 
       {/* Step Indicator */}
       <div className="px-6 md:px-12 py-5" style={{ borderBottom: `1px solid ${c.line}`, background: c.bg }}>
         <div className="max-w-6xl mx-auto">
-          {/* Phase labels */}
           <div className="flex items-center gap-2 mb-3">
             <span className="text-xs uppercase" style={{ letterSpacing: '0.2em', fontWeight: 600, color: step <= 4 ? c.accent : c.inkMuted }}>Match</span>
             <span className="text-xs" style={{ color: c.line }}>1–4</span>
-            <div style={{ width: '24px', height: '1px', background: c.line }} />
+            <div style={{ width: '20px', height: '1px', background: c.line }} />
             <span className="text-xs uppercase" style={{ letterSpacing: '0.2em', fontWeight: 600, color: step >= 5 ? c.accent : c.inkMuted }}>Co-Design</span>
             <span className="text-xs" style={{ color: c.line }}>5–9</span>
             <div style={{ flex: 1 }} />
             <span className="text-xs" style={{ color: c.inkMuted }}>Step {step} of {TOTAL_STEPS} · {stepLabels[step - 1]}</span>
           </div>
-          {/* Dots */}
           <div className="flex items-center gap-1">
             {stepLabels.map((label, idx) => {
               const stepNum = idx + 1;
@@ -286,23 +229,12 @@ export default function GatewayDiscover() {
               const done = step > stepNum;
               return (
                 <React.Fragment key={label}>
-                  {idx === 4 && (
-                    <div style={{ width: '16px', height: '1px', background: step > 4 ? c.accent : c.line, flexShrink: 0 }} />
-                  )}
-                  <div
-                    className="flex-shrink-0 flex items-center justify-center text-xs"
-                    style={{
-                      width: '22px', height: '22px', borderRadius: '50%',
-                      background: done || active ? c.accent : 'transparent',
-                      color: done || active ? c.bg : c.inkMuted,
-                      border: done || active ? 'none' : `1.5px solid ${c.line}`,
-                      fontFamily: serif, fontSize: '10px', fontWeight: 500,
-                    }}
-                  >
+                  {idx === 4 && <div style={{ width: '14px', height: '1px', background: step > 4 ? c.accent : c.line, flexShrink: 0 }} />}
+                  <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '22px', height: '22px', borderRadius: '50%', background: done || active ? c.accent : 'transparent', color: done || active ? c.bg : c.inkMuted, border: done || active ? 'none' : `1.5px solid ${c.line}`, fontFamily: serif, fontSize: '10px', fontWeight: 500 }}>
                     {done ? '✓' : stepNum}
                   </div>
                   {idx < stepLabels.length - 1 && idx !== 3 && (
-                    <div style={{ flex: 1, height: '1px', background: done ? c.accent : c.line, minWidth: '6px', maxWidth: '36px' }} />
+                    <div style={{ flex: 1, height: '1px', background: done ? c.accent : c.line, minWidth: '6px', maxWidth: '34px' }} />
                   )}
                 </React.Fragment>
               );
@@ -319,26 +251,20 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 01 / Pathway</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Are you applying<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>solo or as a team?</span>
+                Are you applying<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>solo or as a team?</span>
               </h1>
               <p className="text-lg leading-relaxed mb-12 max-w-2xl" style={{ color: c.inkSoft }}>
                 Students can apply individually or form a group of 2–5. Groups share one project but each member completes their own assessment.
               </p>
               <div className="grid md:grid-cols-2 gap-4 mb-12">
-                {[{ id: 'solo', title: 'Solo', sub: 'Just me' }, { id: 'group', title: 'Group', sub: '2–5 students, one project' }].map((opt) => {
-                  const selected = pathway === opt.id;
-                  return (
-                    <div key={opt.id} className="text-left p-8" style={{ background: selected ? c.ink : c.bg, color: selected ? c.bg : c.ink, border: `1px solid ${selected ? c.ink : c.line}` }}>
-                      <div className="text-3xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>{opt.title}</div>
-                      <div className="text-sm" style={{ color: selected ? '#C9C2B8' : c.inkSoft }}>{opt.sub}</div>
-                    </div>
-                  );
-                })}
+                {[{ id: 'solo', title: 'Solo', sub: 'Just me' }, { id: 'group', title: 'Group', sub: '2–5 students, one project' }].map((opt) => (
+                  <div key={opt.id} className="text-left p-8" style={{ background: opt.id === 'solo' ? c.ink : c.bg, color: opt.id === 'solo' ? c.bg : c.ink, border: `1px solid ${opt.id === 'solo' ? c.ink : c.line}` }}>
+                    <div className="text-3xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>{opt.title}</div>
+                    <div className="text-sm" style={{ color: opt.id === 'solo' ? '#C9C2B8' : c.inkSoft }}>{opt.sub}</div>
+                  </div>
+                ))}
               </div>
-              <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>
-                Continue to Assessment →
-              </button>
+              <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Assessment →</button>
             </div>
           )}
 
@@ -347,66 +273,50 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 02 / Assessment</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Tell us about yourself.<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>We&apos;ll find your match.</span>
+                Tell us about yourself.<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>We&apos;ll find your match.</span>
               </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                A short structured assessment captures interests, skills, time commitment, and prior experience.
-              </p>
+              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>A short structured assessment captures interests, skills, time commitment, and prior experience.</p>
               <div className="p-5 mb-12 max-w-2xl flex gap-4 items-start" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
                 <span style={{ color: c.accent, fontSize: '14px', fontWeight: 600, fontStyle: 'italic' }}>i</span>
-                <p className="text-sm leading-relaxed" style={{ color: c.inkSoft, fontStyle: 'italic' }}>
-                  Sample profile shown. The full assessment in the live product also includes deeper learning competency questions across mastery, identity, and creativity.
-                </p>
+                <p className="text-sm leading-relaxed" style={{ color: c.inkSoft, fontStyle: 'italic' }}>Sample profile shown. The full assessment also includes deeper learning competency questions across mastery, identity, and creativity.</p>
               </div>
               <div className="mb-12">
                 <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Topics that interest you</div>
                 <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Select all that apply</div>
                 <div className="flex flex-wrap gap-2.5">
-                  {TOPICS.map((t) => {
-                    const selected = selectedTopics.has(t.id);
-                    return (
-                      <div key={t.id} className="px-4 py-2.5 text-sm" style={{ background: selected ? c.ink : c.chipBg, color: selected ? c.bg : c.ink, border: `1px solid ${selected ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: selected ? 1 : 0.7 }}>
-                        <span className="mr-1.5">{t.emoji}</span>{t.label}
-                      </div>
-                    );
-                  })}
+                  {TOPICS.map((t) => { const sel = selectedTopics.has(t.id); return (
+                    <div key={t.id} className="px-4 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
+                      <span className="mr-1.5">{t.emoji}</span>{t.label}
+                    </div>
+                  ); })}
                 </div>
               </div>
               <div className="mb-12">
                 <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Skills you bring</div>
                 <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Select all that apply</div>
                 <div className="flex flex-wrap gap-2.5">
-                  {SKILLS.map((s) => {
-                    const selected = selectedSkills.has(s);
-                    return (
-                      <div key={s} className="px-4 py-2.5 text-sm" style={{ background: selected ? c.ink : c.chipBg, color: selected ? c.bg : c.ink, border: `1px solid ${selected ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: selected ? 1 : 0.7 }}>
-                        {s}
-                      </div>
-                    );
-                  })}
+                  {SKILLS.map((s) => { const sel = selectedSkills.has(s); return (
+                    <div key={s} className="px-4 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
+                      {s}
+                    </div>
+                  ); })}
                 </div>
               </div>
               <div className="mb-12">
                 <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Hours per week</div>
                 <div className="text-sm mb-6" style={{ color: c.inkSoft }}>How much time can you commit?</div>
                 <div className="flex flex-wrap gap-2.5">
-                  {HOURS.map((h) => {
-                    const selected = hours === h;
-                    return (
-                      <div key={h} className="px-5 py-2.5 text-sm" style={{ background: selected ? c.ink : c.chipBg, color: selected ? c.bg : c.ink, border: `1px solid ${selected ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: selected ? 1 : 0.7 }}>
-                        {h}
-                      </div>
-                    );
-                  })}
+                  {HOURS.map((h) => { const sel = SAMPLE.hours === h; return (
+                    <div key={h} className="px-5 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
+                      {h}
+                    </div>
+                  ); })}
                 </div>
               </div>
               <div className="mb-16">
                 <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Prior experience</div>
                 <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Any clubs, projects, or volunteer work that shaped how you think about service?</div>
-                <div className="w-full px-4 py-3 leading-relaxed text-base" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '90px' }}>
-                  {priorExp}
-                </div>
+                <div className="w-full px-4 py-3 leading-relaxed text-base" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '90px' }}>{SAMPLE.priorExp}</div>
               </div>
               <div className="flex gap-3">
                 <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
@@ -420,8 +330,7 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 03 / Matches</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Three partners,<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>chosen for you.</span>
+                Three partners,<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>chosen for you.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
                 Ranked by alignment with the assessment. Each partner is vetted for safeguarding, project-readiness, and bilateral fit.
@@ -433,85 +342,80 @@ export default function GatewayDiscover() {
                 </p>
               </div>
               <div className="space-y-5 mb-12">
-                {matches.map((org) => {
-                  const isChosen = chosenOrg === org.id;
-                  return (
-                    <div key={org.id} className="gw-card p-6 md:p-8" style={{ background: isChosen ? c.bgDeep : c.bg, border: `1px solid ${isChosen ? c.ink : c.line}` }}>
-                      <div className="flex items-start justify-between gap-6 mb-5">
-                        <div className="flex items-start gap-4 flex-1 min-w-0">
-                          <div className="flex-shrink-0 flex items-center justify-center text-lg" style={{ width: '52px', height: '52px', background: c.ink, color: c.bg, fontFamily: serif, fontWeight: 500 }}>{org.initials}</div>
-                          <div className="min-w-0">
-                            <h3 className="text-xl md:text-2xl mb-1 leading-tight" style={{ fontFamily: serif, fontWeight: 500 }}>{org.name}</h3>
-                            <div className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>{org.category}</div>
-                          </div>
-                        </div>
-                        <div className="flex-shrink-0 text-right">
-                          <div className="text-3xl md:text-4xl" style={{ fontFamily: serif, fontWeight: 400, color: c.accent, lineHeight: 1 }}>{org.matchScore}%</div>
-                          <div className="text-xs uppercase mt-1" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>Match</div>
+                {matches.map((o) => (
+                  <div key={o.id} className="gw-card p-6 md:p-8" style={{ background: chosenOrgId === o.id ? c.bgDeep : c.bg, border: `1px solid ${chosenOrgId === o.id ? c.ink : c.line}` }}>
+                    <div className="flex items-start justify-between gap-6 mb-5">
+                      <div className="flex items-start gap-4 flex-1 min-w-0">
+                        <div className="flex-shrink-0 flex items-center justify-center text-lg" style={{ width: '52px', height: '52px', background: c.ink, color: c.bg, fontFamily: serif, fontWeight: 500 }}>{o.initials}</div>
+                        <div className="min-w-0">
+                          <h3 className="text-xl md:text-2xl mb-1 leading-tight" style={{ fontFamily: serif, fontWeight: 500 }}>{o.name}</h3>
+                          <div className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>{o.category}</div>
                         </div>
                       </div>
-                      <p className="text-base leading-relaxed mb-4" style={{ color: c.ink }}>{org.description}</p>
-                      <div className="text-sm leading-relaxed mb-5 pl-4" style={{ color: c.inkSoft, borderLeft: `2px solid ${c.accent}` }}>
-                        <span style={{ fontWeight: 500, color: c.ink }}>Why this match: </span>{org.reasoning}
+                      <div className="flex-shrink-0 text-right">
+                        <div className="text-3xl md:text-4xl" style={{ fontFamily: serif, fontWeight: 400, color: c.accent, lineHeight: 1 }}>{o.matchScore}%</div>
+                        <div className="text-xs uppercase mt-1" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>Match</div>
                       </div>
-                      <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6 text-sm" style={{ color: c.inkSoft }}>
-                        <div className="flex items-center gap-2"><span style={{ color: c.accent }}>📍</span>{org.location}</div>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: c.accent }}>{org.mode === 'Remote' ? '💻' : org.mode === 'Onsite' ? '🏢' : '🔀'}</span>
-                          <span style={{ fontWeight: 500, color: c.ink }}>{org.mode}</span>
-                          <span>· {org.modeDetail}</span>
-                        </div>
-                        {org.needsNow && (
-                          <div className="text-xs uppercase px-2.5 py-1" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.22em', fontWeight: 600 }}>Needs students now</div>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => goToSelect(org.id)}
-                        className="px-6 py-3 text-xs uppercase tracking-widest gw-cta"
-                        style={{ background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`, fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans, transition: 'all 0.2s' }}
-                        onMouseEnter={(e) => { e.currentTarget.style.background = c.ink; e.currentTarget.style.color = c.bg; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = c.ink; }}
-                      >
-                        Select this Partner →
-                      </button>
                     </div>
-                  );
-                })}
+                    <p className="text-base leading-relaxed mb-4" style={{ color: c.ink }}>{o.description}</p>
+                    <div className="text-sm leading-relaxed mb-5 pl-4" style={{ color: c.inkSoft, borderLeft: `2px solid ${c.accent}` }}>
+                      <span style={{ fontWeight: 500, color: c.ink }}>Why this match: </span>{o.reasoning}
+                    </div>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6 text-sm" style={{ color: c.inkSoft }}>
+                      <div className="flex items-center gap-2"><span style={{ color: c.accent }}>📍</span>{o.location}</div>
+                      <div className="flex items-center gap-2">
+                        <span style={{ color: c.accent }}>{o.mode === 'Remote' ? '💻' : o.mode === 'Onsite' ? '🏢' : '🔀'}</span>
+                        <span style={{ fontWeight: 500, color: c.ink }}>{o.mode}</span>
+                        <span>· {o.modeDetail}</span>
+                      </div>
+                      {o.needsNow && <div className="text-xs uppercase px-2.5 py-1" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.22em', fontWeight: 600 }}>Needs students now</div>}
+                    </div>
+                    <button
+                      onClick={() => selectOrg(o.id)}
+                      className="px-6 py-3 text-xs uppercase tracking-widest gw-cta org-select-btn"
+                      style={{ background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`, fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans, transition: 'all 0.2s' }}
+                    >
+                      Select this Partner →
+                    </button>
+                  </div>
+                ))}
               </div>
               <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back to Assessment</button>
             </div>
           )}
 
-          {/* ── STEP 4: SELECT ── */}
+          {/* ── STEP 4: SELECT (interstitial) ── */}
           {step === 4 && (
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 04 / Select</div>
               <h1 className="text-4xl md:text-5xl mb-6 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                You&apos;re matched with<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400, color: c.accent }}>{selectedOrg.name}.</span>
+                You&apos;ve selected<br />
+                <span style={{ fontStyle: 'italic', fontWeight: 400, color: c.accent }}>{org.name}.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-12 max-w-2xl" style={{ color: c.inkSoft }}>
-                The match is confirmed. Next, you and your partner co-design the actual project — scoping what you&apos;ll do, what you&apos;ll learn, and how you&apos;ll measure it.
+                Now let&apos;s start co-design — the structured process where you write a proposal, meet your partner, and shape your project together.
               </p>
-              <div className="p-8 mb-12 max-w-2xl text-left" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
-                <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>What happens in co-design</div>
-                <ul className="space-y-3 text-sm" style={{ color: c.ink }}>
-                  {[
-                    'You write a proposal grounded in a 4-criteria rubric — with Sage, our writing coach, giving feedback in the margin',
-                    'You book a 30-minute kickoff call with Saigon Children\'s Charity',
-                    'The partner reviews and confirms — or asks for revision',
-                    'You meet, take notes, and write a final proposal from the conversation',
-                  ].map((item, i) => (
-                    <li key={i} className="flex gap-3">
-                      <span style={{ color: c.accent }}>—</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+
+              {/* 5 preview cards */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-12">
+                {[
+                  { icon: '✍️', label: 'Write your proposal', step: 5 },
+                  { icon: '📅', label: 'Schedule a meeting', step: 6 },
+                  { icon: '✓', label: 'Get partner confirmation', step: 7 },
+                  { icon: '💬', label: 'Have the conversation', step: 8 },
+                  { icon: '📄', label: 'Submit your final proposal', step: 9 },
+                ].map((card) => (
+                  <div key={card.step} className="p-4 text-center" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+                    <div className="text-2xl mb-2">{card.icon}</div>
+                    <div className="text-xs leading-snug" style={{ color: c.inkSoft }}>{card.label}</div>
+                    <div className="text-xs mt-2 uppercase" style={{ letterSpacing: '0.18em', color: c.inkMuted, fontWeight: 500 }}>Step {card.step}</div>
+                  </div>
+                ))}
               </div>
+
               <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Propose →</button>
+                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back to Matches</button>
+                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Start Co-design →</button>
               </div>
             </div>
           )}
@@ -521,19 +425,18 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 05 / Propose</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Now write your proposal —<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>with a coach in the margin.</span>
+                Now write your proposal —<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>with a coach in the margin.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
                 Students draft a 500-word proposal grounded in a 4-criteria rubric. Sage, our writing coach, gives feedback against each criterion — without writing for them.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8 mb-12">
-                {/* Left: sample proposal */}
+                {/* LEFT: sample proposal */}
                 <div>
-                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Your Draft</div>
-                  <div className="p-6 mb-3 leading-relaxed text-sm" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '220px' }}>
-                    I will lead two literacy workshops per month for Saigon Children&apos;s Charity, focused on reading comprehension for grade 4–5 students in District 1. As a former IB English student who tutored younger peers for two years at SSIS, I bring both content knowledge and the patience to work with kids who struggle with English. I can commit five hours per week through August...
+                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Your Draft · {org.name}</div>
+                  <div className="p-6 mb-3 leading-relaxed text-sm" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '240px' }}>
+                    {org.sampleProposal}
                   </div>
                   <div className="flex justify-between text-xs" style={{ color: c.inkMuted }}>
                     <span>129 / 500 words</span>
@@ -541,34 +444,89 @@ export default function GatewayDiscover() {
                   </div>
                 </div>
 
-                {/* Right: rubric */}
+                {/* RIGHT: tabs */}
                 <div>
-                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Rubric · Sage&apos;s Feedback</div>
-                  <div className="space-y-3">
-                    {/* Claim - expanded */}
-                    <div className="p-5" style={{ border: `1px solid ${c.accent}`, background: c.bg }}>
-                      <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>Claim</div>
-                      <p className="text-sm leading-relaxed mb-3" style={{ color: c.inkSoft }}>State clearly what you want to do and why it matters. Name a concrete action — not a vague intention.</p>
-                      <div className="p-3 text-sm leading-relaxed" style={{ background: c.accentSoft, fontStyle: 'italic', color: c.ink }}>
-                        &ldquo;I will design and lead two literacy workshops per month for Saigon Children&apos;s Charity grade 4–5 readers, because the gap between Vietnamese-language reading and English literacy is where their students stall.&rdquo;
-                      </div>
-                    </div>
-                    {/* Contribution - expanded */}
-                    <div className="p-5" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
-                      <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>Contribution</div>
-                      <p className="text-sm leading-relaxed mb-3" style={{ color: c.inkSoft }}>Show what unique skills or experience you bring. Be concrete — this is not the place to be modest.</p>
-                      <div className="p-3 text-sm leading-relaxed" style={{ background: c.accentSoft, fontStyle: 'italic', color: c.ink }}>
-                        &ldquo;Two years of peer tutoring at SSIS plus my IB English background match what Saigon Children&apos;s Charity needs from volunteers who can hold the room with kids learning to read in a second language.&rdquo;
-                      </div>
-                    </div>
-                    {/* Collapsed pills */}
-                    <div className="flex gap-2">
-                      {['Commitment', 'Closing'].map((label) => (
-                        <div key={label} className="px-4 py-2 text-xs uppercase" style={{ border: `1px solid ${c.line}`, color: c.inkMuted, letterSpacing: '0.18em', fontWeight: 500 }}>{label}</div>
-                      ))}
-                    </div>
-                    <p className="text-xs" style={{ color: c.inkMuted }}>Sage&apos;s assessment is shown on the next screen.</p>
+                  {/* Tab toggle */}
+                  <div className="flex gap-0 mb-4" style={{ border: `1px solid ${c.line}` }}>
+                    {[{ id: 'rubric', label: '💡 Rubric & Suggestions' }, { id: 'sage', label: '✓ Sage\'s Assessment' }].map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setProposeTab(tab.id)}
+                        className="flex-1 py-2.5 text-xs gw-cta"
+                        style={{
+                          fontFamily: sans, fontWeight: 600, border: 'none', cursor: 'pointer',
+                          letterSpacing: '0.1em',
+                          background: proposeTab === tab.id ? (tab.id === 'sage' ? c.sageBg : c.accentSoft) : c.bg,
+                          color: proposeTab === tab.id ? c.ink : c.inkMuted,
+                          borderBottom: proposeTab === tab.id ? `2px solid ${tab.id === 'sage' ? '#5A7A4A' : c.accent}` : '2px solid transparent',
+                        }}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
                   </div>
+
+                  {/* Tab 1: Rubric & Suggestions */}
+                  {proposeTab === 'rubric' && (
+                    <div>
+                      {/* Banner */}
+                      <div className="p-3 mb-4 flex gap-2 items-start" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
+                        <span>💡</span>
+                        <div>
+                          <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.18em', color: c.accent, fontWeight: 600 }}>Suggestions from Sage</div>
+                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>These are examples of what strong proposals look like for each criterion. Use them as inspiration — don&apos;t copy them.</div>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {CRITERIA.map((cr) => (
+                          <div key={cr.key} className="p-4" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+                            <div className="text-xs uppercase mb-1" style={{ letterSpacing: '0.2em', color: c.accent, fontWeight: 700 }}>{cr.label}</div>
+                            <p className="text-xs leading-relaxed mb-3" style={{ color: c.inkSoft }}>{cr.desc}</p>
+                            {/* Strong example sub-block */}
+                            <div style={{ borderLeft: `2px solid ${c.accent}`, paddingLeft: '10px' }}>
+                              <div className="inline-flex items-center gap-1 px-2 py-0.5 mb-2 text-xs uppercase" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.15em', fontWeight: 600, borderRadius: '3px' }}>
+                                💡 Strong Example
+                              </div>
+                              <p className="text-xs leading-relaxed mb-2" style={{ fontStyle: 'italic', color: c.ink }}>
+                                &ldquo;{org.strongExamples[cr.key]}&rdquo;
+                              </p>
+                              <p className="text-xs" style={{ color: c.inkMuted, fontStyle: 'italic' }}>This is a suggestion — your draft goes on the left.</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tab 2: Sage's Assessment */}
+                  {proposeTab === 'sage' && (
+                    <div>
+                      {/* Banner */}
+                      <div className="p-3 mb-4 flex gap-2 items-start" style={{ background: c.sageBg, border: `1px solid #C8D8C0` }}>
+                        <span>✓</span>
+                        <div>
+                          <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.18em', color: '#4A6E3A', fontWeight: 600 }}>Sage&apos;s Feedback on Your Draft</div>
+                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>Personalized assessment based on what you wrote on the left. Updates as you revise.</div>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {CRITERIA.map((cr) => (
+                          <div key={cr.key} className="p-4" style={{ border: `1px solid #C8D8C0`, background: '#F4F8F2' }}>
+                            <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.2em', color: '#4A6E3A', fontWeight: 700 }}>{cr.label}</div>
+                            <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.12em', color: c.inkMuted, fontWeight: 500 }}>Sage · Writing Coach</div>
+                            <p className="text-xs leading-relaxed" style={{ color: c.ink, fontStyle: 'italic' }}>
+                              &ldquo;{org.sageAssessment[cr.key]}&rdquo;
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Bottom note (both tabs) */}
+                  <p className="text-xs mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
+                    In the live product, Sage&apos;s assessment updates in real time as the student writes. Strong examples remain static reference points.
+                  </p>
                 </div>
               </div>
 
@@ -591,7 +549,9 @@ export default function GatewayDiscover() {
               </p>
 
               <div className="mb-8">
-                <div className="text-xs uppercase mb-4" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Week of June 9, 2026 · Saigon Children&apos;s Charity</div>
+                <div className="text-xs uppercase mb-4" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>
+                  Week of June 9, 2026 · {org.name}
+                </div>
                 <div className="grid grid-cols-3 gap-2 mb-6">
                   {[
                     { day: 'Mon 9', time: '4:00 PM', state: 'available' },
@@ -604,17 +564,7 @@ export default function GatewayDiscover() {
                     { day: 'Fri 13', time: '3:00 PM', state: 'available' },
                     { day: 'Fri 13', time: '4:30 PM', state: 'taken' },
                   ].map((slot, i) => (
-                    <div
-                      key={i}
-                      className={slot.state === 'available' ? 'slot-available' : ''}
-                      style={{
-                        padding: '14px 12px',
-                        border: slot.state === 'selected' ? `2px solid ${c.accent}` : `1px solid ${c.line}`,
-                        background: slot.state === 'selected' ? c.accentSoft : slot.state === 'taken' ? '#F5F0E8' : c.bg,
-                        opacity: slot.state === 'taken' ? 0.45 : 1,
-                        textAlign: 'center',
-                      }}
-                    >
+                    <div key={i} className={slot.state === 'available' ? 'slot-available' : ''} style={{ padding: '14px 12px', border: slot.state === 'selected' ? `2px solid ${c.accent}` : `1px solid ${c.line}`, background: slot.state === 'selected' ? c.accentSoft : slot.state === 'taken' ? '#F5F0E8' : c.bg, opacity: slot.state === 'taken' ? 0.45 : 1, textAlign: 'center', transition: 'border-color 0.2s' }}>
                       <div className="text-xs uppercase mb-1" style={{ letterSpacing: '0.15em', color: slot.state === 'selected' ? c.accent : c.inkMuted, fontWeight: 600 }}>{slot.day}</div>
                       <div className="text-sm" style={{ fontWeight: slot.state === 'selected' ? 600 : 400, color: slot.state === 'taken' ? c.inkMuted : c.ink }}>{slot.time}</div>
                       {slot.state === 'taken' && <div className="text-xs mt-1" style={{ color: c.inkMuted }}>Taken</div>}
@@ -623,15 +573,13 @@ export default function GatewayDiscover() {
                   ))}
                 </div>
 
-                {/* Confirmation card */}
                 <div className="p-5 flex gap-4 items-start" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
                   <span style={{ fontSize: '20px' }}>📅</span>
                   <div>
-                    <div className="text-sm font-medium mb-1" style={{ color: c.ink, fontWeight: 600 }}>Tuesday June 10, 3:30 PM · 30 min with Saigon Children&apos;s Charity</div>
+                    <div className="text-sm mb-1" style={{ color: c.ink, fontWeight: 600 }}>Tuesday June 10, 3:30 PM · 30 min with {org.name}</div>
                     <div className="text-sm" style={{ color: c.inkSoft }}>Zoom link sent on confirmation</div>
                   </div>
                 </div>
-
                 <p className="text-sm mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
                   Before the call: jot down 3 things you&apos;re excited to work on and 2 questions for the partner.
                 </p>
@@ -655,21 +603,10 @@ export default function GatewayDiscover() {
                 Partner organizations see the proposal and meeting request together. They accept, request a revision, or suggest a different time.
               </p>
 
-              {/* Toggle */}
               <div className="flex gap-2 mb-8">
                 {['waiting', 'accepted'].map((state) => (
-                  <button
-                    key={state}
-                    onClick={() => setOrgReviewState(state)}
-                    className="px-5 py-2 text-xs uppercase"
-                    style={{
-                      letterSpacing: '0.18em', fontWeight: 600, fontFamily: sans,
-                      background: orgReviewState === state ? c.ink : 'transparent',
-                      color: orgReviewState === state ? c.bg : c.inkMuted,
-                      border: `1px solid ${orgReviewState === state ? c.ink : c.line}`,
-                      cursor: 'pointer',
-                    }}
-                  >
+                  <button key={state} onClick={() => setOrgReviewState(state)} className="px-5 py-2 text-xs uppercase gw-cta"
+                    style={{ letterSpacing: '0.18em', fontWeight: 600, fontFamily: sans, background: orgReviewState === state ? c.ink : 'transparent', color: orgReviewState === state ? c.bg : c.inkMuted, border: `1px solid ${orgReviewState === state ? c.ink : c.line}`, cursor: 'pointer' }}>
                     {state === 'waiting' ? 'Waiting State' : 'Accepted State'}
                   </button>
                 ))}
@@ -678,16 +615,11 @@ export default function GatewayDiscover() {
               {orgReviewState === 'waiting' && (
                 <div className="p-8 max-w-xl" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
                   <div className="text-4xl mb-4">⏳</div>
-                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>Waiting for Saigon Children&apos;s Charity</div>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>
-                    Your proposal and meeting request have been sent. Partners typically respond within 48 hours.
-                  </p>
+                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>Waiting for {org.name}</div>
+                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>Your proposal and meeting request have been sent. Partners typically respond within 48 hours.</p>
                   <ul className="space-y-2 text-sm" style={{ color: c.ink }}>
                     {['Proposal submitted', 'Meeting requested: Tue June 10, 3:30 PM', 'CV attached'].map((item) => (
-                      <li key={item} className="flex gap-3 items-center">
-                        <span style={{ color: c.accent }}>✓</span>
-                        <span>{item}</span>
-                      </li>
+                      <li key={item} className="flex gap-3 items-center"><span style={{ color: c.accent }}>✓</span><span>{item}</span></li>
                     ))}
                   </ul>
                 </div>
@@ -696,12 +628,10 @@ export default function GatewayDiscover() {
               {orgReviewState === 'accepted' && (
                 <div className="p-8 max-w-xl" style={{ border: `1px solid ${c.accent}`, background: c.bg }}>
                   <div className="text-4xl mb-4">✅</div>
-                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400, color: c.accent }}>Saigon Children&apos;s Charity accepted!</div>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>
-                    Meeting confirmed for Tuesday June 10, 3:30 PM. Zoom link sent to your email.
-                  </p>
+                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400, color: c.accent }}>{org.name} accepted!</div>
+                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>Meeting confirmed for Tuesday June 10, 3:30 PM. Zoom link sent to your email.</p>
                   <div className="p-4 text-sm leading-relaxed" style={{ background: c.accentSoft, color: c.ink }}>
-                    🎙 Meeting will be recorded with consent. Transcript guides the final proposal.
+                    🎙 {org.confirmationNote}
                   </div>
                 </div>
               )}
@@ -718,18 +648,16 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 08 / Meeting</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                The conversation that<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>shapes the project.</span>
+                The conversation that<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>shapes the project.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
                 Students and partners meet for 30 minutes. The platform captures key points so the student can write a refined final proposal afterward.
               </p>
 
               <div className="grid md:grid-cols-2 gap-10 mb-10">
-                {/* Left: call UI */}
                 <div>
                   <div className="flex gap-4 mb-6">
-                    {[{ initials: 'JL', label: 'Jamie Lee', sub: 'Sample student' }, { initials: 'SC', label: 'Saigon Children\'s Charity', sub: 'Partner org' }].map((p) => (
+                    {[{ initials: 'JL', label: 'Jamie Lee', sub: 'Sample student' }, { initials: org.initials, label: org.name, sub: 'Partner org' }].map((p) => (
                       <div key={p.initials} className="flex-1 text-center">
                         <div className="flex items-center justify-center mx-auto mb-3 text-2xl" style={{ width: '72px', height: '72px', background: c.bgDeep, border: `1px solid ${c.line}`, fontFamily: serif, fontWeight: 500, color: c.ink }}>
                           {p.initials}
@@ -747,15 +675,10 @@ export default function GatewayDiscover() {
                   </div>
                 </div>
 
-                {/* Right: live highlights */}
                 <div>
                   <div className="text-xs uppercase mb-4" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Live Highlights</div>
                   <ul className="space-y-4">
-                    {[
-                      "Saigon Children's Charity needs literacy support for grade 4–5 readers in District 1.",
-                      'They suggested co-leading two sessions in the May curriculum starting June 24.',
-                      'Success measured by reading-level progression across the eight-week placement.',
-                    ].map((item, i) => (
+                    {org.meetingHighlights.map((item, i) => (
                       <li key={i} className="flex gap-3 text-sm leading-relaxed" style={{ color: c.ink }}>
                         <span style={{ color: c.accent, flexShrink: 0, fontWeight: 600 }}>—</span>
                         <span>{item}</span>
@@ -780,19 +703,17 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 09 / Final</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                From conversation<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400 }}>to commitment.</span>
+                From conversation<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>to commitment.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
                 After the meeting, the student writes a final proposal incorporating what they learned. Sage asks questions — students write the answers.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8 mb-10">
-                {/* Left: final draft */}
                 <div>
-                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Final Proposal Draft</div>
+                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Final Proposal Draft · {org.name}</div>
                   <div className="p-6 mb-3 leading-relaxed text-sm" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '200px' }}>
-                    Following our meeting on June 10, I will co-lead two of the four sessions in Saigon Children&apos;s Charity&apos;s June literacy block. My specific role is to design and facilitate the comprehension portion of each session. Success will be measured by reading-level progression across the eight-week placement, tracked using Saigon Children&apos;s Charity&apos;s existing assessment rubric. I am asking for one staff supervisor to debrief with me weekly...
+                    {org.finalProposalDraft}
                   </div>
                   <div className="flex justify-between text-xs" style={{ color: c.inkMuted }}>
                     <span>187 / 500 words</span>
@@ -800,21 +721,12 @@ export default function GatewayDiscover() {
                   </div>
                 </div>
 
-                {/* Right: from meeting + Sage */}
                 <div className="space-y-6">
                   <div>
                     <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>From Your Meeting</div>
                     <ul className="space-y-2 text-sm" style={{ color: c.inkSoft }}>
-                      {[
-                        "Saigon Children's Charity needs literacy support for grade 4–5 readers",
-                        'You can co-lead two of the four sessions starting June 24',
-                        'Resources available: classroom space, printed materials, basic supplies',
-                        'Success measured by reading-level progression',
-                      ].map((item, i) => (
-                        <li key={i} className="flex gap-3">
-                          <span style={{ color: c.accent }}>—</span>
-                          <span>{item}</span>
-                        </li>
+                      {org.meetingInsights.map((item, i) => (
+                        <li key={i} className="flex gap-3"><span style={{ color: c.accent }}>—</span><span>{item}</span></li>
                       ))}
                     </ul>
                   </div>
@@ -822,11 +734,7 @@ export default function GatewayDiscover() {
                   <div className="p-5" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
                     <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>Sage · Final Proposal Coach</div>
                     <ul className="space-y-3 text-sm" style={{ color: c.ink }}>
-                      {[
-                        "What is your specific role? Be concrete — 'I will design and lead 2 of the 4 sessions.'",
-                        "How will you know it worked? Saigon Children's Charity uses reading-level progression — can you tie your project to that measure?",
-                        'What do you need from them? Resources, time, a supervisor?',
-                      ].map((q, i) => (
+                      {org.sageQuestions.map((q, i) => (
                         <li key={i} className="flex gap-3 leading-relaxed">
                           <span style={{ color: c.accent, flexShrink: 0 }}>→</span>
                           <span>{q}</span>
@@ -838,19 +746,12 @@ export default function GatewayDiscover() {
                 </div>
               </div>
 
-              {/* CTA */}
               <div className="p-8 mb-10 text-center" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
                 <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>This is what Gateway produces</div>
                 <p className="text-sm leading-relaxed mb-6 max-w-xl mx-auto" style={{ color: c.ink }}>
                   A documented, structured, measurable placement — with a real project brief, a real partner, and a real outcome. Enroll a student in the founding cohort to start the process.
                 </p>
-                <a
-                  href={FORM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${btnClass} gw-cta-primary inline-block`}
-                  style={{ ...btnPrimary, textDecoration: 'none' }}
-                >
+                <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className={`${btnClass} gw-cta-primary inline-block`} style={{ ...btnPrimary, textDecoration: 'none' }}>
                   Reserve a Spot in the Founding Cohort →
                 </a>
               </div>
