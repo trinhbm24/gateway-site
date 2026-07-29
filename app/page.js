@@ -221,7 +221,7 @@ export default function GatewayLanding() {
           >
             {[
               ['8 weeks', 'Summer 2026'],
-              ['10–15', 'Founding students'],
+              ['15–20', 'Founding students'],
               ['Vetted', 'Community partners'],
               ['Harvard GSE', 'Research-grounded'],
             ].map(([big, small]) => (
@@ -398,7 +398,7 @@ export default function GatewayLanding() {
             >
               Summer 2026.<br />
               <span style={{ fontStyle: 'italic', fontWeight: 400 }}>
-                Ten to fifteen students.
+                Fifteen to twenty students.
               </span>
             </h2>
           </div>
