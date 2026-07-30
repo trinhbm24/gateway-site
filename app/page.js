@@ -2,21 +2,6 @@
 
 import React, { useEffect } from 'react';
 
-/**
- * Gateway Impact Lab — Landing Page
- *
- * BEFORE DEPLOY, swap these placeholders (Cmd/Ctrl+F to find them):
- *   [YOUR-FORM-URL]   → your Google Form URL
- *   [YOUR-EMAIL]      → your email
- *   [YOUR-LINKEDIN]   → your LinkedIn URL
- *
- * For your headshot:
- *   1. Drop a photo named "long.jpg" into the /public folder
- *   2. Replace the [ Founder Portrait ] block (search for it below)
- *      with: <img src="/long.jpg" alt="Long Trinh"
- *                 className="w-full aspect-[4/5] object-cover" />
- */
-
 export default function GatewayLanding() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
@@ -44,8 +29,6 @@ export default function GatewayLanding() {
     line: '#D9CFB8',
   };
 
-  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwulLmtaB55wADoGW0nXgC9-p66LrGUmK1QlDPMU8-UmCQZg/viewform?usp=header';
-
   const steps = [
     {
       num: '01',
@@ -57,29 +40,28 @@ export default function GatewayLanding() {
       num: '02',
       title: 'Match',
       text:
-        'We pair each student with vetted HCMC community partners whose actual operational needs align with what the student wants to develop. Founding cohort matching is hand-curated by the founder — turning every placement into structured training data for our matching model.',
+        'Each student is paired with a vetted community partner whose actual operational needs align with what the student wants to develop. Every match is hand-curated — not assigned from a list, but built from a real conversation about fit on both sides.',
     },
     {
       num: '03',
       title: 'Co-design',
       text:
-        'Student and partner sit down together and scope a real eight-week project. Our co-design tool surfaces the tensions between what the student wants to learn and what the organization actually needs — turning that conversation into a structured project brief.',
+        'Student and partner sit down together and scope a real project. The co-design tool surfaces the tensions between what the student wants to learn and what the organization actually needs — turning that conversation into a structured project brief both sides commit to.',
     },
     {
       num: '04',
       title: 'Document',
       text:
-        'Weekly reflections, competency tracking, partner feedback, and a final narrative report — turning service learning work into evidence that schools, parents, and college admissions committees can actually use.',
+        'Weekly reflections, competency tracking, partner feedback, and a final narrative report — turning real work into evidence that schools, parents, and college admissions committees can actually use.',
     },
   ];
 
   const includes = [
-    'Eight-week structured placement with a vetted community partner',
+    'Structured placement with a vetted community partner',
     'Weekly 1:1 mentorship with the founder',
     'AI-scaffolded co-design and reflection tools',
     'Competency tracking across three growth dimensions',
     'Final narrative report for schools and college applications',
-    'Founding family privileges (priority 2027 placement, sibling rates)',
   ];
 
   return (
@@ -114,12 +96,10 @@ export default function GatewayLanding() {
         .gw-cta-outline:hover { background: ${c.ink}; color: ${c.bg}; }
       `}</style>
 
+      {/* Nav */}
       <nav
         className="sticky top-0 z-50 backdrop-blur-md"
-        style={{
-          background: 'rgba(250, 246, 238, 0.88)',
-          borderBottom: `1px solid ${c.line}`,
-        }}
+        style={{ background: 'rgba(250, 246, 238, 0.88)', borderBottom: `1px solid ${c.line}` }}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 flex justify-between items-center">
           <a href="#" className="flex items-center gap-3">
@@ -137,13 +117,6 @@ export default function GatewayLanding() {
           </a>
           <div className="flex items-center gap-6 md:gap-10">
             <a
-              href="#cohort"
-              className="text-xs uppercase tracking-widest hidden md:inline gw-link"
-              style={{ color: c.ink, fontWeight: 500 }}
-            >
-              Founding Cohort
-            </a>
-            <a
               href="/co-design"
               className="text-xs uppercase tracking-widest hidden md:inline gw-link"
               style={{ color: c.ink, fontWeight: 500 }}
@@ -151,65 +124,64 @@ export default function GatewayLanding() {
               Co-design Tool
             </a>
             <a
-              href={FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 text-xs uppercase tracking-widest gw-cta-dark"
-              style={{
-                background: c.ink,
-                color: c.bg,
-                fontWeight: 500,
-              }}
+              href="/partners"
+              className="text-xs uppercase tracking-widest hidden md:inline gw-link"
+              style={{ color: c.ink, fontWeight: 500 }}
             >
-              Apply
+              Partners
+            </a>
+            <a
+              href="/contact"
+              className="text-xs uppercase tracking-widest hidden md:inline gw-link"
+              style={{ color: c.ink, fontWeight: 500 }}
+            >
+              Contact
+            </a>
+            <a
+              href="/contact"
+              className="px-5 py-2.5 text-xs uppercase tracking-widest gw-cta-dark"
+              style={{ background: c.ink, color: c.bg, fontWeight: 500 }}
+            >
+              Get in Touch
             </a>
           </div>
         </div>
       </nav>
 
+      {/* Hero */}
       <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-24 md:pb-40">
         <div className="max-w-7xl mx-auto">
           <div className="gw-rise gw-d1 text-xs uppercase mb-10" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
-            — Founding Cohort · Summer 2026 · Starting in Ho Chi Minh City
+            — Deeper Learning · Real Projects · San Francisco Bay Area
           </div>
           <h1
             className="gw-rise gw-d2 text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] mb-12 max-w-5xl"
             style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.02em' }}
           >
-            International school <em style={{ fontWeight: 400 }}>service learning</em><br />
-            is broken.{' '}
-            <span style={{ color: c.accent, fontWeight: 400 }}>We rebuilt it.</span>
+            Service hours don&apos;t impress anyone.{' '}
+            <em style={{ fontWeight: 400, color: c.accent }}>Real work</em> does.
           </h1>
           <p
             className="gw-rise gw-d3 text-lg md:text-xl max-w-2xl mb-12 leading-relaxed"
             style={{ color: c.inkSoft, fontWeight: 400 }}
           >
-            Gateway matches students with vetted community organizations for eight-week,
-            co-designed projects, beginning in Ho Chi Minh City. Real outcomes for organizations.
-            Real growth for students. Documented results for schools and parents.
+            The Gateway Method matches students with vetted community organizations for
+            co-designed projects that produce real outcomes. Real results for organizations.
+            Real growth for students. Documented evidence for schools, parents, and college
+            applications.
           </p>
           <div className="gw-rise gw-d4 flex flex-col sm:flex-row gap-3">
             <a
-              href="#cohort"
+              href="/contact"
               className="px-8 py-4 text-xs uppercase tracking-widest text-center gw-cta-primary"
-              style={{
-                background: c.accent,
-                color: c.bg,
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-              }}
+              style={{ background: c.accent, color: c.bg, fontWeight: 500, letterSpacing: '0.2em' }}
             >
-              Apply to the Founding Cohort →
+              Get in Touch →
             </a>
             <a
               href="/co-design"
               className="px-8 py-4 text-xs uppercase tracking-widest text-center gw-cta-outline"
-              style={{
-                border: `1px solid ${c.ink}`,
-                color: c.ink,
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-              }}
+              style={{ border: `1px solid ${c.ink}`, color: c.ink, fontWeight: 500, letterSpacing: '0.2em' }}
             >
               Try the Co-design Tool
             </a>
@@ -220,10 +192,10 @@ export default function GatewayLanding() {
             style={{ borderTop: `1px solid ${c.line}` }}
           >
             {[
-              ['8 weeks', 'Summer 2026'],
-              ['15–20', 'Founding students'],
-              ['Vetted', 'Community partners'],
               ['Harvard GSE', 'Research-grounded'],
+              ['1:1', 'Founder mentorship'],
+              ['3', 'Growth dimensions tracked'],
+              ['Vetted', 'Community partners'],
             ].map(([big, small]) => (
               <div key={small}>
                 <div className="text-2xl mb-1" style={{ fontFamily: serif, fontWeight: 400, color: c.ink }}>
@@ -238,6 +210,7 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* 01 / The Problem */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderTop: `1px solid ${c.line}` }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -258,26 +231,25 @@ export default function GatewayLanding() {
             </h2>
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 text-lg leading-relaxed" style={{ color: c.inkSoft }}>
               <p>
-                Every IB and most international schools require service learning.
-                The intent is real — service learning is meant to build empathy,
-                leadership, and the kind of agency and future ready skills that
-                classrooms can&apos;t teach on their own.
+                Nearly every high school requires community service, and the intent is real —
+                service is meant to build empathy, leadership, and the kind of agency and
+                future-ready skills that classrooms can&apos;t teach on their own.
               </p>
               <p>
-                The execution isn&apos;t. Matching is informal. Scaffolding is missing. Outcomes
-                go undocumented. Schools spend tens of thousands on coordinator time.
-                Parents pay tuition that covers it. Students fill obligations and &ldquo;check
-                the box&rdquo; instead of growing from them.
+                The execution isn&apos;t. Matching is informal, scaffolding is missing, and
+                outcomes go undocumented, so students log hours instead of growing from them
+                — and admissions readers, who see thousands of padded activity lists every
+                cycle, can tell the difference immediately.
               </p>
             </div>
 
             <div className="mt-16 pt-12 grid md:grid-cols-3 gap-8" style={{ borderTop: `1px solid ${c.line}` }}>
               {[
-                ['Required', 'Service learning is mandatory at every IB and most international schools worldwide'],
-                ['Unstructured', 'Most placements have no scaffolding or measurable outcomes'],
-                ['Underbuilt', 'A core graduation requirement at thousands of schools and almost no one is building tools for it'],
+                ['Required', 'Service is mandatory or expected at most high schools, and colleges expect to see it'],
+                ['Unstructured', 'Most placements have no scaffolding, no continuity, and no measurable outcomes'],
+                ['Undifferentiated', 'A checked box looks like every other checked box — real, documented work is what stands out'],
               ].map(([stat, label]) => (
-                <div key={label}>
+                <div key={stat}>
                   <div className="text-5xl mb-3" style={{ fontFamily: serif, fontWeight: 300, color: c.accent }}>
                     {stat}
                   </div>
@@ -291,6 +263,7 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* 02 / The Gateway Method */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderTop: `1px solid ${c.line}`, background: c.bgDeep }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -298,7 +271,7 @@ export default function GatewayLanding() {
               className="text-xs uppercase md:sticky md:top-24"
               style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}
             >
-              02 / The Model
+              02 / The Gateway Method
             </div>
           </div>
           <div className="col-span-12 md:col-span-9">
@@ -306,8 +279,8 @@ export default function GatewayLanding() {
               className="text-3xl md:text-5xl mb-16 leading-[1.1]"
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
             >
-              Eight weeks. One project.<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Measurable Outcomes.</span>
+              One student. One project.<br />
+              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>Measurable outcomes.</span>
             </h2>
 
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-12">
@@ -334,6 +307,7 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* Co-design teaser */}
       <section
         className="px-6 md:px-12 lg:px-20 py-24 md:py-32"
         style={{ background: c.ink, color: c.bg }}
@@ -359,19 +333,14 @@ export default function GatewayLanding() {
             </h2>
             <p className="text-lg leading-relaxed mb-12 max-w-3xl" style={{ color: '#C9C2B8' }}>
               Our co-design tool keeps going, guiding the student and the organization
-              through the project they'll actually do together, the outcomes they'll both
+              through the project they&apos;ll actually do together, the outcomes they&apos;ll both
               work toward, and the brief that anchors the partnership. Both sides end with
               something measurable.
             </p>
             <a
               href="/co-design"
               className="inline-block px-8 py-4 text-xs uppercase tracking-widest gw-cta-primary"
-              style={{
-                background: c.accent,
-                color: c.bg,
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-              }}
+              style={{ background: c.accent, color: c.bg, fontWeight: 500, letterSpacing: '0.2em' }}
             >
               Walk through it →
             </a>
@@ -379,8 +348,9 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* 03 / Working Together */}
       <section
-        id="cohort"
+        id="working-together"
         className="px-6 md:px-12 lg:px-20 py-24 md:py-32"
         style={{ borderTop: `1px solid ${c.line}` }}
       >
@@ -390,30 +360,27 @@ export default function GatewayLanding() {
               className="text-xs uppercase mb-6"
               style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}
             >
-              03 / The Founding Cohort
+              03 / Working Together
             </div>
             <h2
               className="text-4xl md:text-6xl leading-[1.05]"
               style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.02em' }}
             >
-              Summer 2026.<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>
-                Fifteen to twenty students.
-              </span>
+              Real projects,{' '}
+              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>guided end to end.</span>
             </h2>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
             <div className="lg:col-span-7">
-              <p className="text-lg leading-relaxed mb-6" style={{ color: c.inkSoft }}>
-                The founding cohort runs in person in Ho Chi Minh City from July through
-                August 2026. Each student is matched with a vetted community partner and
-                works through a structured eight-week placement — with weekly mentorship
-                from the founder, scaffolded reflection, competency tracking, and a final
-                narrative report.
-              </p>
               <p className="text-lg leading-relaxed mb-12" style={{ color: c.inkSoft }}>
-                Founding families also receive priority placement in subsequent cohorts and sibling enrollment privileges.
+                I work with a small number of students at a time, taking each one through
+                the full Gateway Method — from discovering what they actually care about,
+                to a hand-curated match with a community organization, to a co-designed
+                project with real stakes, to documentation that carries weight in a college
+                application. Every engagement includes weekly 1:1 mentorship with me, and
+                because I keep the roster small, every student gets a project scoped to
+                them rather than a program they&apos;re slotted into.
               </p>
 
               <div
@@ -440,62 +407,25 @@ export default function GatewayLanding() {
               <div className="lg:sticky lg:top-28">
                 <div
                   className="p-10 lg:p-12"
-                  style={{
-                    border: `1px solid ${c.ink}`,
-                    background: c.bg,
-                  }}
+                  style={{ border: `1px solid ${c.ink}`, background: c.bg }}
                 >
                   <div
-                    className="text-xs uppercase mb-8"
+                    className="text-xs uppercase mb-6"
                     style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}
                   >
-                    Founding Cohort Tuition
+                    Start a Conversation
                   </div>
-                  <div className="flex items-baseline gap-3 mb-3">
-                    <span
-                      style={{
-                        fontFamily: serif,
-                        fontWeight: 400,
-                        color: c.ink,
-                        letterSpacing: '-0.03em',
-                        lineHeight: 1,
-                        fontSize: '4.5rem',
-                      }}
-                    >
-                      $2,000
-                    </span>
-                    <span className="text-sm" style={{ color: c.inkMuted }}>
-                      USD
-                    </span>
-                  </div>
-                  <div
-                    className="text-sm mb-10 leading-relaxed"
-                    style={{ color: c.inkSoft }}
-                  >
-                    Eight weeks · Summer 2026 · Ho Chi Minh City
-                  </div>
-                  <a
-                    href={FORM_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full text-center px-8 py-4 text-xs uppercase tracking-widest mb-6 gw-cta-dark"
-                    style={{
-                      background: c.ink,
-                      color: c.bg,
-                      fontWeight: 500,
-                      letterSpacing: '0.2em',
-                    }}
-                  >
-                    Reserve a Spot →
-                  </a>
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: c.inkSoft }}
-                  >
-                    A $150 reservation fee secures your founding cohort spot, fully
-                    refundable until your student is matched with a confirmed partner in
-                    mid-June 2026. Full tuition is collected before the cohort begins.
+                  <p className="text-base leading-relaxed mb-10" style={{ color: c.inkSoft }}>
+                    Every engagement starts with a conversation about your student — where
+                    they are, what they care about, and whether this is the right fit.
                   </p>
+                  <a
+                    href="/contact"
+                    className="block w-full text-center px-8 py-4 text-xs uppercase tracking-widest gw-cta-dark"
+                    style={{ background: c.ink, color: c.bg, fontWeight: 500, letterSpacing: '0.2em' }}
+                  >
+                    Get in Touch →
+                  </a>
                 </div>
               </div>
             </div>
@@ -503,6 +433,7 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* 04 / Community Partners */}
       <section
         className="px-6 md:px-12 lg:px-20 py-24 md:py-32"
         style={{ borderTop: `1px solid ${c.line}`, background: c.bgDeep }}
@@ -524,31 +455,24 @@ export default function GatewayLanding() {
               Built with the organizations<br />
               <span style={{ fontStyle: 'italic', fontWeight: 400 }}>actually doing the work.</span>
             </h2>
-            <p className="text-lg leading-relaxed max-w-3xl mb-16" style={{ color: c.inkSoft }}>
+            <p className="text-lg leading-relaxed max-w-3xl mb-10" style={{ color: c.inkSoft }}>
               Community partners join Gateway free of charge. Each is vetted for
-              safeguarding standards, project-readiness, and bilateral fit. Our founding
-              lab partner is the VinaCapital Foundation.
+              safeguarding standards, project-readiness, and fit — and each placement is
+              scoped around a real operational need, so the organization gains as much as
+              the student does.
             </p>
-
-            <blockquote
-              className="pl-8 py-4 max-w-3xl"
-              style={{ borderLeft: `2px solid ${c.accent}` }}
+            <a
+              href="/partners"
+              className="text-sm gw-link"
+              style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px', fontWeight: 500 }}
             >
-              <p
-                className="text-2xl md:text-3xl leading-[1.3] mb-6"
-                style={{ fontFamily: serif, fontWeight: 300, fontStyle: 'italic', color: c.ink }}
-              >
-                &ldquo;We can be, and we will be your lab. We will be your learning lab.
-                Whatever information we have is yours.&rdquo;
-              </p>
-              <div className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkSoft, fontWeight: 500 }}>
-                Rad Kivette · CEO, VinaCapital Foundation
-              </div>
-            </blockquote>
+              What partners get →
+            </a>
           </div>
         </div>
       </section>
 
+      {/* 05 / Founder */}
       <section
         id="founder"
         className="px-6 md:px-12 lg:px-20 py-24 md:py-32"
@@ -591,15 +515,15 @@ export default function GatewayLanding() {
               <div className="md:col-span-8 space-y-6 text-lg leading-relaxed" style={{ color: c.ink }}>
                 <p>
                   I&apos;m a Saigon South International School graduate. Junior year, I spent
-                  Saturdays teaching English at orphanages around Ho Chi Minh City. I had no curriculum,
-                  no continuity, no way to measure whether any of it stuck. By the end of the
-                  year, I knew the answer: it hadn&apos;t.
+                  Saturdays teaching English at orphanages around Ho Chi Minh City. I had
+                  no curriculum, no continuity, no way to measure whether any of it stuck.
+                  By the end of the year, I knew the answer: it hadn&apos;t.
                 </p>
                 <p>
-                  Senior year, I tried something else. A few classmates and I started a club
-                  called Bliss 4 Youth that worked with the children of our school&apos;s local
-                  staff. We met weekly, built a real curriculum, and tracked progress over the
-                  year. Every student left with improved English.
+                  Senior year, I tried something else. A few classmates and I started a
+                  club called Bliss 4 Youth that worked with the children of our school&apos;s
+                  local staff. We met weekly, built a real curriculum, and tracked progress
+                  over the year. Every student left with improved English.
                 </p>
                 <p>
                   That&apos;s the difference Gateway is built to scale. The platform is grounded
@@ -608,7 +532,9 @@ export default function GatewayLanding() {
                   identity, and creativity actually look like in young people.
                 </p>
                 <p style={{ color: c.inkSoft, paddingTop: '0.5rem' }}>
-                  Ho Chi Minh City is where it starts.{' '}
+                  That&apos;s the method I now bring to students in the Bay Area — one real
+                  project at a time.{' '}
+                  Based in the San Francisco Bay Area ·{' '}
                   <a
                     href="https://www.linkedin.com/in/long-trinh-47b61042/"
                     target="_blank"
@@ -633,6 +559,7 @@ export default function GatewayLanding() {
         </div>
       </section>
 
+      {/* Footer */}
       <footer
         className="px-6 md:px-12 lg:px-20 py-12"
         style={{ borderTop: `1px solid ${c.line}` }}
@@ -651,8 +578,13 @@ export default function GatewayLanding() {
                 Impact Lab
               </span>
             </div>
-            <div className="text-sm" style={{ color: c.inkSoft }}>
-              Ho Chi Minh City · Cambridge, MA
+            <div className="text-sm mb-3" style={{ color: c.inkSoft }}>
+              San Francisco Bay Area · Cambridge, MA
+            </div>
+            <div className="flex gap-6 text-xs uppercase" style={{ letterSpacing: '0.18em' }}>
+              <a href="/co-design" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Co-design Tool</a>
+              <a href="/partners" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Partners</a>
+              <a href="/contact" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Contact</a>
             </div>
           </div>
           <div className="text-xs" style={{ color: c.inkMuted }}>

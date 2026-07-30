@@ -28,48 +28,78 @@ const HOURS = ['1–2 hrs', '3–5 hrs', '5–8 hrs', '8+ hrs'];
 
 const ORGS = [
   {
-    id: 'scc',
-    name: "Saigon Children's Charity",
-    initials: 'SC',
-    category: 'Education · Youth Development',
-    description: 'Removes barriers to education for disadvantaged Vietnamese children — scholarships, school infrastructure, vocational training. Operating since 1992.',
-    location: 'District 1, Ho Chi Minh City',
+    id: 'bvl',
+    name: 'Bay Vista Literacy',
+    initials: 'BV',
+    category: 'Education · Literacy',
+    description: 'Provides structured literacy support for underserved students in East Oakland — tutoring, reading comprehension workshops, and teacher coaching.',
+    location: 'Oakland, CA',
     mode: 'Hybrid',
-    modeDetail: 'Weekly onsite + remote project work',
+    modeDetail: 'Weekly onsite sessions + remote prep work',
     needsNow: true,
     weights: {
-      topics: { 'Education & Youth': 1.0, 'Community Development': 0.7, 'Children & Welfare': 0.8, 'Arts & Culture': 0.5 },
-      skills: { Writing: 0.9, Teaching: 1.0, Leadership: 0.7, Outreach: 0.7, Translation: 0.7, Research: 0.5, Design: 0.5 },
+      topics: { 'Education & Youth': 1.0, 'Community Development': 0.7, 'Children & Welfare': 0.8, 'Arts & Culture': 0.4 },
+      skills: { Writing: 0.9, Teaching: 1.0, Leadership: 0.7, Outreach: 0.6, Research: 0.5, Design: 0.4 },
     },
   },
   {
-    id: 'bluedragon',
-    name: "Blue Dragon Children's Foundation",
-    initials: 'BD',
-    category: 'Child Welfare · Anti-Trafficking',
-    description: "Rescues and supports children from trafficking, forced labor, and slavery. Expanded to HCMC in 2024 in partnership with the city's Association for Child Rights.",
-    location: 'District 2, Ho Chi Minh City',
-    mode: 'Onsite',
-    modeDetail: 'Background check + safeguarding training required',
+    id: 'sffa',
+    name: 'SF Food Access',
+    initials: 'SF',
+    category: 'Community Development · Nutrition',
+    description: 'Connects Tenderloin and SoMa residents to healthy food through community workshops, multilingual education campaigns, and direct distribution partnerships.',
+    location: 'San Francisco, CA',
+    mode: 'Hybrid',
+    modeDetail: 'Community workshops onsite + remote content work',
+    needsNow: true,
+    weights: {
+      topics: { 'Community Development': 1.0, 'Health & Wellbeing': 0.9, 'Education & Youth': 0.5, 'Justice & Human Rights': 0.6 },
+      skills: { Outreach: 1.0, Writing: 0.8, Research: 0.7, Data: 0.7, Design: 0.6 },
+    },
+  },
+  {
+    id: 'ecyc',
+    name: 'East Cut Youth Code',
+    initials: 'EC',
+    category: 'Technology · Youth Education',
+    description: 'Runs free after-school coding programs for middle schoolers in San Jose, with a focus on students from communities underrepresented in tech.',
+    location: 'San Jose, CA',
+    mode: 'Hybrid',
+    modeDetail: 'After-school sessions onsite + remote curriculum work',
     needsNow: false,
     weights: {
-      topics: { 'Children & Welfare': 1.0, 'Justice & Human Rights': 1.0, 'Education & Youth': 0.6, 'Health & Wellbeing': 0.5 },
-      skills: { Research: 0.9, Writing: 0.8, Translation: 1.0, Data: 0.7, Design: 0.5 },
+      topics: { 'Technology & Innovation': 1.0, 'Education & Youth': 0.9, 'Community Development': 0.6, 'Children & Welfare': 0.5 },
+      skills: { Coding: 1.0, Teaching: 0.9, Design: 0.7, Research: 0.6, Leadership: 0.5 },
     },
   },
   {
-    id: 'vcf',
-    name: 'VinaCapital Foundation',
-    initials: 'VC',
-    category: 'Health · Education',
-    description: 'National foundation operating eight programs across health, education, and community development. Founding learning lab partner of Gateway.',
-    location: 'District 1, Ho Chi Minh City',
-    mode: 'Hybrid',
-    modeDetail: 'Project-based, regular site visits',
+    id: 'baya',
+    name: 'Bay Area Youth Arts',
+    initials: 'BA',
+    category: 'Arts & Culture · Youth',
+    description: 'Provides free arts programming and exhibition opportunities for Bay Area young people — visual art, video, and performance — and places their work in public venues.',
+    location: 'Berkeley, CA',
+    mode: 'Onsite',
+    modeDetail: 'Studio-based, regular in-person sessions',
     needsNow: true,
     weights: {
-      topics: { 'Health & Wellbeing': 1.0, 'Education & Youth': 0.9, 'Community Development': 0.8, 'Technology & Innovation': 0.6 },
-      skills: { Research: 1.0, Data: 0.9, Writing: 0.7, Design: 0.7, Leadership: 0.6 },
+      topics: { 'Arts & Culture': 1.0, 'Education & Youth': 0.8, 'Community Development': 0.6, 'Technology & Innovation': 0.5 },
+      skills: { Design: 1.0, Video: 0.9, Writing: 0.7, Teaching: 0.6, Outreach: 0.5 },
+    },
+  },
+  {
+    id: 'svea',
+    name: 'SV Environmental Action',
+    initials: 'SV',
+    category: 'Environment · Community Science',
+    description: 'Monitors air and water quality across the South Bay using a community sensor network, and translates the data into advocacy tools for frontline neighborhoods.',
+    location: 'Palo Alto, CA',
+    mode: 'Remote',
+    modeDetail: 'Fully remote, data and communications work',
+    needsNow: false,
+    weights: {
+      topics: { 'Environment': 1.0, 'Community Development': 0.7, 'Justice & Human Rights': 0.6, 'Technology & Innovation': 0.7 },
+      skills: { Research: 1.0, Data: 0.9, Writing: 0.7, Coding: 0.7, Outreach: 0.5 },
     },
   },
 ];
@@ -169,7 +199,7 @@ export default function GatewayDiscover() {
   const CRITERIA = [
     { key: 'claim', label: 'Claim', desc: 'State clearly what you want to do and why it matters. Name a concrete action — not a vague intention.' },
     { key: 'contribution', label: 'Contribution', desc: 'Show what unique skills, experience, or perspective you bring. Be concrete — this is not the place to be modest.' },
-    { key: 'commitment', label: 'Commitment', desc: 'Be specific about your hours, schedule, and what you can realistically deliver across eight weeks.' },
+    { key: 'commitment', label: 'Commitment', desc: 'Be specific about your hours, schedule, and what you can realistically deliver across the multi-week placement.' },
     { key: 'closing', label: 'Closing', desc: 'Name one measurable outcome. What will be true by the end that wasn\'t true at the start?' },
   ];
 
@@ -341,6 +371,9 @@ export default function GatewayDiscover() {
                   Selected interests ({Array.from(selectedTopics).map(t => TOPICS.find(x => x.id === t)?.label).filter(Boolean).join(', ')}) and skills ({Array.from(selectedSkills).join(', ')}) were weighed against each partner&apos;s stated needs and current openings.
                 </p>
               </div>
+              <p className="text-xs mb-8" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
+                Organizations shown are illustrative examples.
+              </p>
               <div className="space-y-5 mb-12">
                 {matches.map((o) => (
                   <div key={o.id} className="gw-card p-6 md:p-8" style={{ background: chosenOrgId === o.id ? c.bgDeep : c.bg, border: `1px solid ${chosenOrgId === o.id ? c.ink : c.line}` }}>
@@ -749,10 +782,10 @@ export default function GatewayDiscover() {
               <div className="p-8 mb-10 text-center" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
                 <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>This is what Gateway produces</div>
                 <p className="text-sm leading-relaxed mb-6 max-w-xl mx-auto" style={{ color: c.ink }}>
-                  A documented, structured, measurable placement — with a real project brief, a real partner, and a real outcome. Enroll a student in the founding cohort to start the process.
+                  A documented, structured, measurable placement — with a real project brief, a real partner, and a real outcome. Start a conversation to learn more.
                 </p>
-                <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className={`${btnClass} gw-cta-primary inline-block`} style={{ ...btnPrimary, textDecoration: 'none' }}>
-                  Reserve a Spot in the Founding Cohort →
+                <a href="/contact" className={`${btnClass} gw-cta-primary inline-block`} style={{ ...btnPrimary, textDecoration: 'none' }}>
+                  Get in Touch →
                 </a>
               </div>
 
