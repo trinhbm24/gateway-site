@@ -109,7 +109,7 @@ const SAMPLE = {
   topics: ['education', 'children'],
   skills: ['Writing', 'Teaching', 'Leadership'],
   hours: '5–8 hrs',
-  priorExp: "I tutored younger kids at my local library in San Jose for two summers in middle school. I learned that good intentions aren't enough. I want to learn how to actually be useful this time.",
+  priorExp: "I tutored younger kids at my local library in San Jose for two summers in middle school. It was fun but pretty unstructured, mostly homework help. I'm a rising junior and am looking for a real sustained project I can point to on my college applications.",
 };
 
 function calculateMatch(org, selectedTopics, selectedSkills) {
