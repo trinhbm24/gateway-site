@@ -36,15 +36,15 @@ export default function PartnersPage() {
     },
     {
       title: 'A project scoped around your real needs',
-      body: "The co-design process means you and the student define the project together — what you need, what they can deliver, and what success looks like. The final brief is a mutual commitment, not a form.",
+      body: "The co-design process means you and the student define the project together: what you need, what they can deliver, and what success looks like. The final brief is a mutual commitment, not a form.",
     },
     {
       title: 'Ongoing support and accountability',
-      body: "I provide weekly check-ins with the student and am available to organizations throughout the placement. If something isn't working, we fix it early — I don't disappear after the match.",
+      body: "I provide weekly check-ins with the student and am available to organizations throughout the placement. If something isn't working, we fix it early. I don't disappear after the match.",
     },
     {
       title: 'Documentation at the end',
-      body: "Every placement closes with a structured outcome report — what the student did, what was delivered, and what was measured. Something you can point to for your own impact reporting.",
+      body: "Every placement closes with a structured outcome report covering what the student did, what was delivered, and what was measured. Something you can point to for your own impact reporting.",
     },
     {
       title: 'No cost, ever',
@@ -55,7 +55,7 @@ export default function PartnersPage() {
   const criteria = [
     'Clear safeguarding policies for student volunteers',
     'At least one staff member available for regular project check-ins',
-    'A real operational need — not just a willingness to host',
+    'A real operational need, not just a willingness to host',
     'Based in or serving the San Francisco Bay Area',
   ];
 
@@ -182,8 +182,8 @@ export default function PartnersPage() {
               <span style={{ fontStyle: 'italic', fontWeight: 400 }}>a placement partner.</span>
             </h2>
             <p className="text-base leading-relaxed" style={{ color: c.inkSoft }}>
-              Every partner is vetted before a student is placed. The process is straightforward
-              — a conversation with me and a review of your safeguarding policies.
+              Every partner is vetted before a student is placed. The process is straightforward:
+              a conversation with me and a review of your safeguarding policies.
             </p>
           </div>
           <div className="col-span-12 md:col-span-6 md:col-start-7">

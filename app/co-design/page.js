@@ -32,7 +32,7 @@ const ORGS = [
     name: 'Bay Vista Literacy',
     initials: 'BV',
     category: 'Education · Literacy',
-    description: 'Provides structured literacy support for underserved students in East Oakland — tutoring, reading comprehension workshops, and teacher coaching.',
+    description: 'Provides structured literacy support for underserved students in East Oakland through tutoring, reading comprehension workshops, and teacher coaching.',
     location: 'Oakland, CA',
     mode: 'Hybrid',
     modeDetail: 'Weekly onsite sessions + remote prep work',
@@ -77,7 +77,7 @@ const ORGS = [
     name: 'Bay Area Youth Arts',
     initials: 'BA',
     category: 'Arts & Culture · Youth',
-    description: 'Provides free arts programming and exhibition opportunities for Bay Area young people — visual art, video, and performance — and places their work in public venues.',
+    description: 'Provides free arts programming and exhibition opportunities for Bay Area young people in visual art, video, and performance, and places their work in public venues.',
     location: 'Berkeley, CA',
     mode: 'Onsite',
     modeDetail: 'Studio-based, regular in-person sessions',
@@ -109,7 +109,7 @@ const SAMPLE = {
   topics: ['education', 'children'],
   skills: ['Writing', 'Teaching', 'Leadership'],
   hours: '5–8 hrs',
-  priorExp: "I taught English at orphanages in District 4 for two summers in middle school. I learned that good intentions aren't enough — I want to learn how to actually be useful this time.",
+  priorExp: "I tutored younger kids at my local library in San Jose for two summers in middle school. I learned that good intentions aren't enough. I want to learn how to actually be useful this time.",
 };
 
 function calculateMatch(org, selectedTopics, selectedSkills) {
@@ -197,8 +197,8 @@ export default function GatewayDiscover() {
   const btnClass = 'px-8 py-4 text-xs uppercase tracking-widest gw-cta';
 
   const CRITERIA = [
-    { key: 'claim', label: 'Claim', desc: 'State clearly what you want to do and why it matters. Name a concrete action — not a vague intention.' },
-    { key: 'contribution', label: 'Contribution', desc: 'Show what unique skills, experience, or perspective you bring. Be concrete — this is not the place to be modest.' },
+    { key: 'claim', label: 'Claim', desc: 'State clearly what you want to do and why it matters. Name a concrete action, not a vague intention.' },
+    { key: 'contribution', label: 'Contribution', desc: 'Show what unique skills, experience, or perspective you bring. Be concrete. This is not the place to be modest.' },
     { key: 'commitment', label: 'Commitment', desc: 'Be specific about your hours, schedule, and what you can realistically deliver across the multi-week placement.' },
     { key: 'closing', label: 'Closing', desc: 'Name one measurable outcome. What will be true by the end that wasn\'t true at the start?' },
   ];
@@ -426,7 +426,7 @@ export default function GatewayDiscover() {
                 <span style={{ fontStyle: 'italic', fontWeight: 400, color: c.accent }}>{org.name}.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-12 max-w-2xl" style={{ color: c.inkSoft }}>
-                Now let&apos;s start co-design — the structured process where you write a proposal, meet your partner, and shape your project together.
+                Now let&apos;s start co-design, the structured process where you write a proposal, meet your partner, and shape your project together.
               </p>
 
               {/* 5 preview cards */}
@@ -458,10 +458,10 @@ export default function GatewayDiscover() {
             <div className="gw-fade">
               <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 05 / Propose</div>
               <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Now write your proposal —<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>with a coach in the margin.</span>
+                Now write your proposal,<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>with a coach in the margin.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Students draft a 500-word proposal grounded in a 4-criteria rubric. Sage, our writing coach, gives feedback against each criterion — without writing for them.
+                Students draft a 500-word proposal grounded in a 4-criteria rubric. Sage, our writing coach, gives feedback against each criterion but never writes for them.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -507,7 +507,7 @@ export default function GatewayDiscover() {
                         <span>💡</span>
                         <div>
                           <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.18em', color: c.accent, fontWeight: 600 }}>Suggestions from Sage</div>
-                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>These are examples of what strong proposals look like for each criterion. Use them as inspiration — don&apos;t copy them.</div>
+                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>These are examples of what strong proposals look like for each criterion. Use them as inspiration but don&apos;t copy them.</div>
                         </div>
                       </div>
                       <div className="space-y-3">
@@ -523,7 +523,7 @@ export default function GatewayDiscover() {
                               <p className="text-xs leading-relaxed mb-2" style={{ fontStyle: 'italic', color: c.ink }}>
                                 &ldquo;{org.strongExamples[cr.key]}&rdquo;
                               </p>
-                              <p className="text-xs" style={{ color: c.inkMuted, fontStyle: 'italic' }}>This is a suggestion — your draft goes on the left.</p>
+                              <p className="text-xs" style={{ color: c.inkMuted, fontStyle: 'italic' }}>This is a suggestion. Your draft goes on the left.</p>
                             </div>
                           </div>
                         ))}
@@ -739,7 +739,7 @@ export default function GatewayDiscover() {
                 From conversation<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>to commitment.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                After the meeting, the student writes a final proposal incorporating what they learned. Sage asks questions — students write the answers.
+                After the meeting, the student writes a final proposal incorporating what they learned. Sage asks questions and students write the answers.
               </p>
 
               <div className="grid md:grid-cols-2 gap-8 mb-10">
@@ -782,7 +782,7 @@ export default function GatewayDiscover() {
               <div className="p-8 mb-10 text-center" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
                 <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>This is what Gateway produces</div>
                 <p className="text-sm leading-relaxed mb-6 max-w-xl mx-auto" style={{ color: c.ink }}>
-                  A documented, structured, measurable placement — with a real project brief, a real partner, and a real outcome. Start a conversation to learn more.
+                  A documented, structured, measurable placement: a real project brief, a real partner, and a real outcome. Start a conversation to learn more.
                 </p>
                 <a href="/contact" className={`${btnClass} gw-cta-primary inline-block`} style={{ ...btnPrimary, textDecoration: 'none' }}>
                   Get in Touch →

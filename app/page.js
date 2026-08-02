@@ -34,25 +34,25 @@ export default function GatewayLanding() {
       num: '01',
       title: 'Discover',
       text:
-        'Students complete a structured assessment that maps interests, skills, and growth goals to the deeper learning competencies — mastery, identity, and creativity — drawn from Mehta and Fine’s Harvard research.',
+        "Students complete a structured assessment that maps interests, skills, and growth goals to three deeper learning competencies drawn from Mehta and Fine’s Harvard research: mastery, identity, and creativity.",
     },
     {
       num: '02',
       title: 'Match',
       text:
-        'Each student is paired with a vetted community partner whose actual operational needs align with what the student wants to develop. Every match is hand-curated — not assigned from a list, but built from a real conversation about fit on both sides.',
+        'Each student is paired with a vetted community partner whose actual operational needs align with what the student wants to develop. Every match is hand-curated. It isn\'t assigned from a list, it\'s built from a real conversation about fit on both sides.',
     },
     {
       num: '03',
       title: 'Co-design',
       text:
-        'Student and partner sit down together and scope a real project. The co-design tool surfaces the tensions between what the student wants to learn and what the organization actually needs — turning that conversation into a structured project brief both sides commit to.',
+        'Student and partner sit down together and scope a real project. The co-design tool surfaces the tensions between what the student wants to learn and what the organization actually needs, turning that conversation into a structured project brief both sides commit to.',
     },
     {
       num: '04',
       title: 'Document',
       text:
-        'Weekly reflections, competency tracking, partner feedback, and a final narrative report — turning real work into evidence that schools, parents, and college admissions committees can actually use.',
+        'Weekly reflections, competency tracking, partner feedback, and a final narrative report all turn real work into evidence that schools, parents, and college admissions committees can actually use.',
     },
   ];
 
@@ -231,14 +231,14 @@ export default function GatewayLanding() {
             </h2>
             <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 text-lg leading-relaxed" style={{ color: c.inkSoft }}>
               <p>
-                Nearly every high school requires community service, and the intent is real —
-                service is meant to build empathy, leadership, and the kind of agency and
+                Nearly every high school requires community service, and the intent is real.
+                Service is meant to build empathy, leadership, and the kind of agency and
                 future-ready skills that classrooms can&apos;t teach on their own.
               </p>
               <p>
                 The execution isn&apos;t. Matching is informal, scaffolding is missing, and
-                outcomes go undocumented, so students log hours instead of growing from them
-                — and admissions readers, who see thousands of padded activity lists every
+                outcomes go undocumented, so students log hours instead of growing from them,
+                and admissions readers, who see thousands of padded activity lists every
                 cycle, can tell the difference immediately.
               </p>
             </div>
@@ -247,7 +247,7 @@ export default function GatewayLanding() {
               {[
                 ['Required', 'Service is mandatory or expected at most high schools, and colleges expect to see it'],
                 ['Unstructured', 'Most placements have no scaffolding, no continuity, and no measurable outcomes'],
-                ['Undifferentiated', 'A checked box looks like every other checked box — real, documented work is what stands out'],
+                ['Undifferentiated', 'A checked box looks like every other checked box. Real, documented work is what stands out.'],
               ].map(([stat, label]) => (
                 <div key={stat}>
                   <div className="text-5xl mb-3" style={{ fontFamily: serif, fontWeight: 300, color: c.accent }}>
@@ -375,7 +375,7 @@ export default function GatewayLanding() {
             <div className="lg:col-span-7">
               <p className="text-lg leading-relaxed mb-12" style={{ color: c.inkSoft }}>
                 I work with a small number of students at a time, taking each one through
-                the full Gateway Method — from discovering what they actually care about,
+                the full Gateway Method: from discovering what they actually care about,
                 to a hand-curated match with a community organization, to a co-designed
                 project with real stakes, to documentation that carries weight in a college
                 application. Every engagement includes weekly 1:1 mentorship with me, and
@@ -416,7 +416,7 @@ export default function GatewayLanding() {
                     Start a Conversation
                   </div>
                   <p className="text-base leading-relaxed mb-10" style={{ color: c.inkSoft }}>
-                    Every engagement starts with a conversation about your student — where
+                    Every engagement starts with a conversation about your student: where
                     they are, what they care about, and whether this is the right fit.
                   </p>
                   <a
@@ -457,7 +457,7 @@ export default function GatewayLanding() {
             </h2>
             <p className="text-lg leading-relaxed max-w-3xl mb-10" style={{ color: c.inkSoft }}>
               Community partners join Gateway free of charge. Each is vetted for
-              safeguarding standards, project-readiness, and fit — and each placement is
+              safeguarding standards, project-readiness, and fit, and each placement is
               scoped around a real operational need, so the organization gains as much as
               the student does.
             </p>
@@ -528,11 +528,11 @@ export default function GatewayLanding() {
                 <p>
                   That&apos;s the difference Gateway is built to scale. The platform is grounded
                   in deeper learning research from my studies at Harvard&apos;s Graduate School
-                  of Education with Jal Mehta — the framework that defines what mastery,
+                  of Education with Jal Mehta, whose framework defines what mastery,
                   identity, and creativity actually look like in young people.
                 </p>
                 <p style={{ color: c.inkSoft, paddingTop: '0.5rem' }}>
-                  That&apos;s the method I now bring to students in the Bay Area — one real
+                  That&apos;s the method I now bring to students in the Bay Area, one real
                   project at a time.{' '}
                   Based in the San Francisco Bay Area ·{' '}
                   <a
