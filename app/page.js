@@ -34,7 +34,7 @@ export default function GatewayLanding() {
       num: '01',
       title: 'Discover',
       text:
-        "Students complete a structured assessment that maps interests, skills, and growth goals to three deeper learning competencies drawn from Mehta and Fine’s Harvard research: mastery, identity, and creativity.",
+        "Students complete a structured assessment that maps interests, skills, and growth goals to three deeper learning competencies from Harvard research on what good learning actually looks like: mastery, identity, and creativity.",
     },
     {
       num: '02',
@@ -58,10 +58,10 @@ export default function GatewayLanding() {
 
   const includes = [
     'Structured placement with a vetted community partner',
-    'Weekly 1:1 mentorship with the founder',
+    'Weekly 1:1 check-ins with Long',
     'AI-scaffolded co-design and reflection tools',
     'Competency tracking across three growth dimensions',
-    'Final narrative report for schools and college applications',
+    'Final narrative report for schools, students, and families',
   ];
 
   return (
@@ -167,8 +167,7 @@ export default function GatewayLanding() {
           >
             The Gateway Method matches students with vetted community organizations for
             co-designed projects that produce real outcomes. Real results for organizations.
-            Real growth for students. Documented evidence for schools, parents, and college
-            applications.
+            Real growth for students. Documented evidence for schools and families.
           </p>
           <div className="gw-rise gw-d4 flex flex-col sm:flex-row gap-3">
             <a
@@ -193,7 +192,7 @@ export default function GatewayLanding() {
           >
             {[
               ['Harvard GSE', 'Research-grounded'],
-              ['1:1', 'Founder mentorship'],
+              ['1:1', 'Check-ins with Long'],
               ['3', 'Growth dimensions tracked'],
               ['Vetted', 'Community partners'],
             ].map(([big, small]) => (
@@ -233,13 +232,12 @@ export default function GatewayLanding() {
               <p>
                 Nearly every high school requires community service, and the intent is real.
                 Service is meant to build empathy, leadership, and the kind of agency and
-                future-ready skills that classrooms can&apos;t teach on their own.
+                the kind of skills that take root in real work, not worksheets.
               </p>
               <p>
                 The execution isn&apos;t. Matching is informal, scaffolding is missing, and
                 outcomes go undocumented, so students log hours instead of growing from them,
-                and admissions readers, who see thousands of padded activity lists every
-                cycle, can tell the difference immediately.
+                and the schools and families who read these applications can tell the difference immediately.
               </p>
             </div>
 
@@ -378,7 +376,7 @@ export default function GatewayLanding() {
                 the full Gateway Method: from discovering what they actually care about,
                 to a hand-curated match with a community organization, to a co-designed
                 project with real stakes, to documentation that carries weight in a college
-                application. Every engagement includes weekly 1:1 mentorship with me, and
+                application. Every placement includes weekly 1:1 check-ins with me, and
                 because I keep the roster small, every student gets a project scoped to
                 them rather than a program they&apos;re slotted into.
               </p>
@@ -503,11 +501,8 @@ export default function GatewayLanding() {
                   <div className="text-xl mb-1" style={{ fontFamily: serif, fontWeight: 500 }}>
                     Long Trinh
                   </div>
-                  <div className="text-sm mb-1" style={{ color: c.inkSoft }}>
-                    Founder &amp; CEO
-                  </div>
                   <div className="text-sm" style={{ color: c.inkSoft }}>
-                    Harvard GSE · LDIT &apos;26
+                    Long Trinh, Ed.M. · Harvard GSE
                   </div>
                 </div>
               </div>
@@ -526,10 +521,10 @@ export default function GatewayLanding() {
                   over the year. Every student left with improved English.
                 </p>
                 <p>
-                  That&apos;s the difference Gateway is built to scale. The platform is grounded
+                  That&apos;s the difference Gateway is designed to make. The method is grounded
                   in deeper learning research from my studies at Harvard&apos;s Graduate School
-                  of Education with Jal Mehta, whose framework defines what mastery,
-                  identity, and creativity actually look like in young people.
+                  of Education, where I worked with researchers whose framework defines what
+                  mastery, identity, and creativity actually look like in young people.
                 </p>
                 <p style={{ color: c.inkSoft, paddingTop: '0.5rem' }}>
                   That&apos;s the method I now bring to students in the Bay Area, one real
@@ -588,7 +583,7 @@ export default function GatewayLanding() {
             </div>
           </div>
           <div className="text-xs" style={{ color: c.inkMuted }}>
-            © 2026 Gateway Impact Lab, PBC · A Delaware Public Benefit Corporation
+            © 2026 Gateway Impact Lab
           </div>
         </div>
       </footer>

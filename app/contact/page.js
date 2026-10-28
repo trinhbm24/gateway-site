@@ -213,7 +213,7 @@ export default function ContactPage() {
             </div>
           </div>
           <div className="text-xs" style={{ color: c.inkMuted }}>
-            © 2026 Gateway Impact Lab, PBC · A Delaware Public Benefit Corporation
+            © 2026 Gateway Impact Lab
           </div>
         </div>
       </footer>

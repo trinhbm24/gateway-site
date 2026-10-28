@@ -232,7 +232,7 @@ export default function GatewayDiscover() {
       {/* Banner */}
       <div className="px-6 md:px-12 py-3" style={{ background: c.accentSoft, borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>Product Walkthrough</span>
+          <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>Interactive Demo</span>
           <span style={{ color: c.inkSoft }}>·</span>
           <span style={{ color: c.ink, fontWeight: 400 }}>
             Sample student journey from intake to final proposal. Use Continue and Back to step through, or click any partner on Matches to see how the flow adapts.
@@ -558,7 +558,7 @@ export default function GatewayDiscover() {
 
                   {/* Bottom note (both tabs) */}
                   <p className="text-xs mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
-                    In the live product, Sage&apos;s assessment updates in real time as the student writes. Strong examples remain static reference points.
+                    In a real placement, Sage&apos;s feedback updates in real time as the student writes. Strong examples remain static reference points.
                   </p>
                 </div>
               </div>
@@ -684,7 +684,7 @@ export default function GatewayDiscover() {
                 The conversation that<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>shapes the project.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Students and partners meet for 30 minutes. The platform captures key points so the student can write a refined final proposal afterward.
+                Students and partners meet for 30 minutes. Gateway captures key points so the student can write a refined final proposal afterward.
               </p>
 
               <div className="grid md:grid-cols-2 gap-10 mb-10">
@@ -804,7 +804,7 @@ export default function GatewayDiscover() {
       <footer className="px-6 md:px-12 py-8 mt-12" style={{ borderTop: `1px solid ${c.line}` }}>
         <div className="max-w-6xl mx-auto flex justify-between items-center text-xs" style={{ color: c.inkMuted }}>
           <div>Gateway Impact Lab · Co-design Tool</div>
-          <div>© 2026 Gateway Impact Lab, PBC</div>
+          <div>© 2026 Gateway Impact Lab</div>
         </div>
       </footer>
     </div>
