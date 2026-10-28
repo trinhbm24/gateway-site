@@ -1,9 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Gateway Impact Lab",
+  title: "Gateway Impact Lab · Long Trinh",
   description:
-    "Gateway matches high school students in the Bay Area with vetted community organizations for co-designed projects that build genuine skills and create real value for students and organizations alike.",
+    "Research on how high school service projects can be co-designed with community organizations so that students learn something real and organizations get real work.",
 };
 
 export default function RootLayout({ children }) {

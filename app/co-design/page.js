@@ -232,7 +232,7 @@ export default function GatewayDiscover() {
       {/* Banner */}
       <div className="px-6 md:px-12 py-3" style={{ background: c.accentSoft, borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>Interactive Demo</span>
+          <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>A walkthrough of the co-design process</span>
           <span style={{ color: c.inkSoft }}>·</span>
           <span style={{ color: c.ink, fontWeight: 400 }}>
             Sample student journey from intake to final proposal. Use Continue and Back to step through, or click any partner on Matches to see how the flow adapts.
