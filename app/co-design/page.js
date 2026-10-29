@@ -1,143 +1,9 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
-import { WALKTHROUGH_ORGS, DEFAULT_ORG_ID } from '../../lib/walkthroughOrgs';
+import React, { useEffect } from 'react';
+import SharedFooter from '../components/SharedFooter';
 
-/**
- * Gateway Co-design Tool — Product Walkthrough
- * Lives at /co-design
- */
-
-const TOPICS = [
-  { id: 'education', label: 'Education & Youth', emoji: '📚' },
-  { id: 'children', label: 'Children & Welfare', emoji: '🧸' },
-  { id: 'health', label: 'Health & Wellbeing', emoji: '💊' },
-  { id: 'environment', label: 'Environment', emoji: '🌱' },
-  { id: 'arts', label: 'Arts & Culture', emoji: '🎨' },
-  { id: 'community', label: 'Community Development', emoji: '🏘️' },
-  { id: 'justice', label: 'Justice & Human Rights', emoji: '⚖️' },
-  { id: 'tech', label: 'Technology & Innovation', emoji: '💻' },
-];
-
-const SKILLS = [
-  'Writing', 'Research', 'Teaching', 'Translation', 'Design',
-  'Coding', 'Outreach', 'Video', 'Data', 'Leadership',
-];
-
-const HOURS = ['1–2 hrs', '3–5 hrs', '5–8 hrs', '8+ hrs'];
-
-const ORGS = [
-  {
-    id: 'bvl',
-    name: 'Bay Vista Literacy',
-    initials: 'BV',
-    category: 'Education · Literacy',
-    description: 'Provides structured literacy support for underserved students in East Oakland through tutoring, reading comprehension workshops, and teacher coaching.',
-    location: 'Oakland, CA',
-    mode: 'Hybrid',
-    modeDetail: 'Weekly onsite sessions + remote prep work',
-    needsNow: true,
-    weights: {
-      topics: { 'Education & Youth': 1.0, 'Community Development': 0.7, 'Children & Welfare': 0.8, 'Arts & Culture': 0.4 },
-      skills: { Writing: 0.9, Teaching: 1.0, Leadership: 0.7, Outreach: 0.6, Research: 0.5, Design: 0.4 },
-    },
-  },
-  {
-    id: 'sffa',
-    name: 'SF Food Access',
-    initials: 'SF',
-    category: 'Community Development · Nutrition',
-    description: 'Connects Tenderloin and SoMa residents to healthy food through community workshops, multilingual education campaigns, and direct distribution partnerships.',
-    location: 'San Francisco, CA',
-    mode: 'Hybrid',
-    modeDetail: 'Community workshops onsite + remote content work',
-    needsNow: true,
-    weights: {
-      topics: { 'Community Development': 1.0, 'Health & Wellbeing': 0.9, 'Education & Youth': 0.5, 'Justice & Human Rights': 0.6 },
-      skills: { Outreach: 1.0, Writing: 0.8, Research: 0.7, Data: 0.7, Design: 0.6 },
-    },
-  },
-  {
-    id: 'ecyc',
-    name: 'East Cut Youth Code',
-    initials: 'EC',
-    category: 'Technology · Youth Education',
-    description: 'Runs free after-school coding programs for middle schoolers in San Jose, with a focus on students from communities underrepresented in tech.',
-    location: 'San Jose, CA',
-    mode: 'Hybrid',
-    modeDetail: 'After-school sessions onsite + remote curriculum work',
-    needsNow: false,
-    weights: {
-      topics: { 'Technology & Innovation': 1.0, 'Education & Youth': 0.9, 'Community Development': 0.6, 'Children & Welfare': 0.5 },
-      skills: { Coding: 1.0, Teaching: 0.9, Design: 0.7, Research: 0.6, Leadership: 0.5 },
-    },
-  },
-  {
-    id: 'baya',
-    name: 'Bay Area Youth Arts',
-    initials: 'BA',
-    category: 'Arts & Culture · Youth',
-    description: 'Provides free arts programming and exhibition opportunities for Bay Area young people in visual art, video, and performance, and places their work in public venues.',
-    location: 'Berkeley, CA',
-    mode: 'Onsite',
-    modeDetail: 'Studio-based, regular in-person sessions',
-    needsNow: true,
-    weights: {
-      topics: { 'Arts & Culture': 1.0, 'Education & Youth': 0.8, 'Community Development': 0.6, 'Technology & Innovation': 0.5 },
-      skills: { Design: 1.0, Video: 0.9, Writing: 0.7, Teaching: 0.6, Outreach: 0.5 },
-    },
-  },
-  {
-    id: 'svea',
-    name: 'SV Environmental Action',
-    initials: 'SV',
-    category: 'Environment · Community Science',
-    description: 'Monitors air and water quality across the South Bay using a community sensor network, and translates the data into advocacy tools for frontline neighborhoods.',
-    location: 'Palo Alto, CA',
-    mode: 'Remote',
-    modeDetail: 'Fully remote, data and communications work',
-    needsNow: false,
-    weights: {
-      topics: { 'Environment': 1.0, 'Community Development': 0.7, 'Justice & Human Rights': 0.6, 'Technology & Innovation': 0.7 },
-      skills: { Research: 1.0, Data: 0.9, Writing: 0.7, Coding: 0.7, Outreach: 0.5 },
-    },
-  },
-];
-
-const SAMPLE = {
-  pathway: 'solo',
-  topics: ['education', 'children'],
-  skills: ['Writing', 'Teaching', 'Leadership'],
-  hours: '5–8 hrs',
-  priorExp: "I tutored younger kids at my local library in San Jose for two summers in middle school. It was fun but pretty unstructured, mostly homework help. I'm a rising junior and am looking for a real sustained project I can point to on my college applications.",
-};
-
-function calculateMatch(org, selectedTopics, selectedSkills) {
-  let topicScore = 0, topicMatches = 0;
-  selectedTopics.forEach((tId) => {
-    const label = TOPICS.find((x) => x.id === tId)?.label;
-    if (label && org.weights.topics[label]) { topicScore += org.weights.topics[label]; topicMatches++; }
-  });
-  const avgTopic = topicMatches > 0 ? topicScore / topicMatches : 0.4;
-  let skillScore = 0, skillMatches = 0;
-  selectedSkills.forEach((s) => {
-    if (org.weights.skills[s]) { skillScore += org.weights.skills[s]; skillMatches++; }
-  });
-  const avgSkill = skillMatches > 0 ? skillScore / skillMatches : 0.4;
-  return Math.min(99, Math.max(52, Math.round(50 + avgTopic * 30 + avgSkill * 19)));
-}
-
-function generateReasoning(org, selectedTopics, selectedSkills) {
-  const topicLabels = Array.from(selectedTopics).map((t) => TOPICS.find((x) => x.id === t)?.label).filter(Boolean);
-  const topTopic = topicLabels.find((t) => (org.weights.topics[t] || 0) >= 0.8);
-  const topSkill = Array.from(selectedSkills).find((s) => (org.weights.skills[s] || 0) >= 0.8);
-  if (topTopic && topSkill) return `Your interest in ${topTopic.toLowerCase()} aligns with their core mission, and your ${topSkill.toLowerCase()} skills match what they actively need from volunteers.`;
-  if (topTopic) return `Your interest in ${topTopic.toLowerCase()} aligns directly with their core mission.`;
-  if (topSkill) return `Your ${topSkill.toLowerCase()} skills match what they're actively looking for in volunteers right now.`;
-  return 'A foundational fit based on your assessment profile and their current project openings.';
-}
-
-export default function GatewayDiscover() {
+export default function OneProject() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const fontLink = document.createElement('link');
@@ -151,662 +17,360 @@ export default function GatewayDiscover() {
   const sans = "'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif";
 
   const c = {
-    bg: '#FAF6EE', bgDeep: '#F1E9D6', ink: '#1A1714', inkSoft: '#5D5550',
-    inkMuted: '#8A8278', accent: '#A8462C', accentSoft: '#E8D4C2', line: '#D9CFB8', chipBg: '#F5EDDA',
-    sageBg: '#EDF2E8',   // light olive for Sage assessment tab
+    bg: '#FAF6EE',
+    bgDeep: '#F1E9D6',
+    ink: '#1A1714',
+    inkSoft: '#5D5550',
+    inkMuted: '#8A8278',
+    accent: '#A8462C',
+    accentSoft: '#E8D4C2',
+    line: '#D9CFB8',
   };
 
-  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfwulLmtaB55wADoGW0nXgC9-p66LrGUmK1QlDPMU8-UmCQZg/viewform?usp=header';
-
-  const selectedTopics = useMemo(() => new Set(SAMPLE.topics), []);
-  const selectedSkills = useMemo(() => new Set(SAMPLE.skills), []);
-
-  const [step, setStep] = useState(1);
-  const [chosenOrgId, setChosenOrgId] = useState(DEFAULT_ORG_ID);
-  const [orgReviewState, setOrgReviewState] = useState('waiting');
-  const [proposeTab, setProposeTab] = useState('rubric'); // 'rubric' | 'sage'
-
-  // Derived org data
-  const org = WALKTHROUGH_ORGS[chosenOrgId] || WALKTHROUGH_ORGS[DEFAULT_ORG_ID];
-
-  const matches = useMemo(() => {
-    return ORGS.map((o) => ({
-      ...o,
-      matchScore: calculateMatch(o, selectedTopics, selectedSkills),
-      reasoning: generateReasoning(o, selectedTopics, selectedSkills),
-    })).sort((a, b) => b.matchScore - a.matchScore);
-  }, [selectedTopics, selectedSkills]);
-
-  const TOTAL_STEPS = 9;
-  const stepLabels = ['Pathway', 'Assessment', 'Matches', 'Select', 'Propose', 'Schedule', 'Org Review', 'Meeting', 'Final'];
-
-  const scrollTop = () => { if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  const goNext = () => { setStep((s) => Math.min(s + 1, TOTAL_STEPS)); scrollTop(); };
-  const goBack = () => { setStep((s) => Math.max(s - 1, 1)); scrollTop(); };
-  const restart = () => { setStep(1); setChosenOrgId(DEFAULT_ORG_ID); setOrgReviewState('waiting'); setProposeTab('rubric'); scrollTop(); };
-
-  const selectOrg = (orgId) => {
-    setChosenOrgId(orgId || DEFAULT_ORG_ID);
-    setStep(4);
-    scrollTop();
+  const sc = {
+    fontSize: '0.65rem',
+    letterSpacing: '0.22em',
+    fontWeight: 600,
+    textTransform: 'uppercase',
   };
 
-  // Shared button styles
-  const btnPrimary = { background: c.accent, color: c.bg, fontWeight: 500, letterSpacing: '0.2em', border: 'none', fontFamily: sans };
-  const btnOutline = { background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`, fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans };
-  const btnClass = 'px-8 py-4 text-xs uppercase tracking-widest gw-cta';
+  const artifactLabel = (text) => (
+    <div style={{ ...sc, color: c.inkMuted, marginBottom: '1rem' }}>{text}</div>
+  );
 
-  const CRITERIA = [
-    { key: 'claim', label: 'Claim', desc: 'State clearly what you want to do and why it matters. Name a concrete action, not a vague intention.' },
-    { key: 'contribution', label: 'Contribution', desc: 'Show what unique skills, experience, or perspective you bring. Be concrete. This is not the place to be modest.' },
-    { key: 'commitment', label: 'Commitment', desc: 'Be specific about your hours, schedule, and what you can realistically deliver across the multi-week placement.' },
-    { key: 'closing', label: 'Closing', desc: 'Name one measurable outcome. What will be true by the end that wasn\'t true at the start?' },
-  ];
+  const artifactRow = (label, value) => (
+    <div className="py-2" style={{ borderBottom: `1px solid ${c.line}` }}>
+      <span style={{ ...sc, color: c.inkMuted }}>{label}</span>
+      <p className="mt-1 text-sm leading-relaxed" style={{ color: c.ink }}>{value}</p>
+    </div>
+  );
+
+  const statusLine = (text) => (
+    <div className="mt-10 flex gap-4 items-start">
+      <span style={{ ...sc, color: c.accent, flexShrink: 0 }}>Status</span>
+      <p className="text-sm leading-relaxed" style={{ color: c.inkSoft }}>{text}</p>
+    </div>
+  );
 
   return (
     <div style={{ fontFamily: sans, background: c.bg, color: c.ink, minHeight: '100vh', WebkitFontSmoothing: 'antialiased' }}>
       <style>{`
-        @keyframes gw-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .gw-fade { animation: gw-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .gw-card { transition: all 0.2s ease; }
-        .gw-card:hover { transform: translateY(-2px); }
-        .gw-cta { transition: background 0.2s, color 0.2s; cursor: pointer; }
-        .gw-cta-primary:hover { background: #8E3923 !important; }
-        .gw-cta-outline:hover { background: ${c.ink} !important; color: ${c.bg} !important; }
-        .slot-available:hover { border-color: ${c.accent} !important; cursor: pointer; }
-        .org-select-btn:hover { background: ${c.ink} !important; color: ${c.bg} !important; }
+        .gw-link { transition: color 0.2s; }
+        .gw-link:hover { color: ${c.accent}; }
       `}</style>
 
       {/* Nav */}
       <nav className="sticky top-0 z-50 backdrop-blur-md" style={{ background: 'rgba(250, 246, 238, 0.88)', borderBottom: `1px solid ${c.line}` }}>
-        <div className="max-w-6xl mx-auto px-6 md:px-12 py-5 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-5 flex justify-between items-center">
           <a href="/" className="flex items-baseline gap-2">
             <span className="text-2xl" style={{ fontFamily: serif, fontWeight: 500, color: c.ink }}>Gateway</span>
             <span style={{ color: c.accent, fontFamily: serif }}>·</span>
-            <span className="text-xs uppercase hidden sm:inline" style={{ letterSpacing: '0.22em', color: c.inkSoft, fontWeight: 500 }}>Co-design Tool</span>
+            <span className="text-xs uppercase hidden sm:inline" style={{ letterSpacing: '0.22em', color: c.inkSoft, fontWeight: 500 }}>One project</span>
           </a>
-          <a href="/" className="text-xs uppercase tracking-widest" style={{ color: c.inkSoft, fontWeight: 500 }}>← Back to Home</a>
+          <a href="/" className="text-xs uppercase tracking-widest gw-link" style={{ color: c.inkSoft, fontWeight: 500 }}>← Back to Home</a>
         </div>
       </nav>
 
-      {/* Banner */}
-      <div className="px-6 md:px-12 py-3" style={{ background: c.accentSoft, borderBottom: `1px solid ${c.line}` }}>
-        <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <span style={{ letterSpacing: '0.22em', fontWeight: 600, textTransform: 'uppercase', color: c.accent }}>A walkthrough of the co-design process</span>
-          <span style={{ color: c.inkSoft }}>·</span>
-          <span style={{ color: c.ink, fontWeight: 400 }}>
-            Sample student journey from intake to final proposal. Use Continue and Back to step through, or click any partner on Matches to see how the flow adapts.
-          </span>
-        </div>
-      </div>
-
-      {/* Step Indicator */}
-      <div className="px-6 md:px-12 py-5" style={{ borderBottom: `1px solid ${c.line}`, background: c.bg }}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs uppercase" style={{ letterSpacing: '0.2em', fontWeight: 600, color: step <= 4 ? c.accent : c.inkMuted }}>Match</span>
-            <span className="text-xs" style={{ color: c.line }}>1–4</span>
-            <div style={{ width: '20px', height: '1px', background: c.line }} />
-            <span className="text-xs uppercase" style={{ letterSpacing: '0.2em', fontWeight: 600, color: step >= 5 ? c.accent : c.inkMuted }}>Co-Design</span>
-            <span className="text-xs" style={{ color: c.line }}>5–9</span>
-            <div style={{ flex: 1 }} />
-            <span className="text-xs" style={{ color: c.inkMuted }}>Step {step} of {TOTAL_STEPS} · {stepLabels[step - 1]}</span>
+      {/* Page header */}
+      <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-20 md:pb-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              One project, start to finish
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            {stepLabels.map((label, idx) => {
-              const stepNum = idx + 1;
-              const active = step === stepNum;
-              const done = step > stepNum;
-              return (
-                <React.Fragment key={label}>
-                  {idx === 4 && <div style={{ width: '14px', height: '1px', background: step > 4 ? c.accent : c.line, flexShrink: 0 }} />}
-                  <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '22px', height: '22px', borderRadius: '50%', background: done || active ? c.accent : 'transparent', color: done || active ? c.bg : c.inkMuted, border: done || active ? 'none' : `1.5px solid ${c.line}`, fontFamily: serif, fontSize: '10px', fontWeight: 500 }}>
-                    {done ? '✓' : stepNum}
-                  </div>
-                  {idx < stepLabels.length - 1 && idx !== 3 && (
-                    <div style={{ flex: 1, height: '1px', background: done ? c.accent : c.line, minWidth: '6px', maxWidth: '34px' }} />
-                  )}
-                </React.Fragment>
-              );
-            })}
+          <div className="col-span-12 md:col-span-9">
+            <h1
+              className="text-4xl md:text-6xl mb-10 leading-[1.05]"
+              style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.02em' }}
+            >
+              What the four moves look like on one project.
+            </h1>
+            <p className="text-lg leading-relaxed max-w-3xl" style={{ color: c.inkSoft }}>
+              The student and the organization below are made up. The questions, the brief, and the reflection prompts are the ones I would use, and the status line under each move says which parts have been tried and which have not. Nothing on this page has yet been done with a real student from beginning to end. That is the study.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <main className="px-6 md:px-12 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto">
-
-          {/* ── STEP 1: PATHWAY ── */}
-          {step === 1 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 01 / Pathway</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Are you applying<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>solo or as a team?</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-12 max-w-2xl" style={{ color: c.inkSoft }}>
-                Students can apply individually or form a group of 2–5. Groups share one project but each member completes their own assessment.
-              </p>
-              <div className="grid md:grid-cols-2 gap-4 mb-12">
-                {[{ id: 'solo', title: 'Solo', sub: 'Just me' }, { id: 'group', title: 'Group', sub: '2–5 students, one project' }].map((opt) => (
-                  <div key={opt.id} className="text-left p-8" style={{ background: opt.id === 'solo' ? c.ink : c.bg, color: opt.id === 'solo' ? c.bg : c.ink, border: `1px solid ${opt.id === 'solo' ? c.ink : c.line}` }}>
-                    <div className="text-3xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>{opt.title}</div>
-                    <div className="text-sm" style={{ color: opt.id === 'solo' ? '#C9C2B8' : c.inkSoft }}>{opt.sub}</div>
-                  </div>
-                ))}
-              </div>
-              <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Assessment →</button>
+      {/* Section 01: Discover */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              01 / Discover
             </div>
-          )}
+          </div>
+          <div className="col-span-12 md:col-span-9 space-y-10">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              A conversation of about an hour, in person or on a call, working through what the student already cares about, what they can do, and where they want to grow. I take notes against the three strands and read them back to the student at the end so they can correct me. What comes out is a one-page profile the student owns.
+            </p>
 
-          {/* ── STEP 2: ASSESSMENT ── */}
-          {step === 2 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 02 / Assessment</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Tell us about yourself.<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>We&apos;ll find your match.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>A short structured assessment captures interests, skills, time commitment, and prior experience.</p>
-              <div className="p-5 mb-12 max-w-2xl flex gap-4 items-start" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
-                <span style={{ color: c.accent, fontSize: '14px', fontWeight: 600, fontStyle: 'italic' }}>i</span>
-                <p className="text-sm leading-relaxed" style={{ color: c.inkSoft, fontStyle: 'italic' }}>Sample profile shown. The full assessment also includes deeper learning competency questions across mastery, identity, and creativity.</p>
-              </div>
-              <div className="mb-12">
-                <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Topics that interest you</div>
-                <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Select all that apply</div>
-                <div className="flex flex-wrap gap-2.5">
-                  {TOPICS.map((t) => { const sel = selectedTopics.has(t.id); return (
-                    <div key={t.id} className="px-4 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
-                      <span className="mr-1.5">{t.emoji}</span>{t.label}
-                    </div>
-                  ); })}
-                </div>
-              </div>
-              <div className="mb-12">
-                <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Skills you bring</div>
-                <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Select all that apply</div>
-                <div className="flex flex-wrap gap-2.5">
-                  {SKILLS.map((s) => { const sel = selectedSkills.has(s); return (
-                    <div key={s} className="px-4 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
-                      {s}
-                    </div>
-                  ); })}
-                </div>
-              </div>
-              <div className="mb-12">
-                <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Hours per week</div>
-                <div className="text-sm mb-6" style={{ color: c.inkSoft }}>How much time can you commit?</div>
-                <div className="flex flex-wrap gap-2.5">
-                  {HOURS.map((h) => { const sel = SAMPLE.hours === h; return (
-                    <div key={h} className="px-5 py-2.5 text-sm" style={{ background: sel ? c.ink : c.chipBg, color: sel ? c.bg : c.ink, border: `1px solid ${sel ? c.ink : c.line}`, fontFamily: sans, fontWeight: 500, borderRadius: '999px', opacity: sel ? 1 : 0.7 }}>
-                      {h}
-                    </div>
-                  ); })}
-                </div>
-              </div>
-              <div className="mb-16">
-                <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Prior experience</div>
-                <div className="text-sm mb-6" style={{ color: c.inkSoft }}>Any clubs, projects, or volunteer work that shaped how you think about service?</div>
-                <div className="w-full px-4 py-3 leading-relaxed text-base" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '90px' }}>{SAMPLE.priorExp}</div>
-              </div>
-              <div className="flex gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Find My Matches →</button>
+            {/* Artifact */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}` }}>
+              {artifactLabel('Discovery Profile · Jamie Lee, Rising Junior, San Jose')}
+              <div className="space-y-0">
+                {artifactRow('What I care about', 'Kids who are behind in reading. I was one of them until fourth grade.')}
+                {artifactRow('What I can do', 'Explain things patiently. I tutored at the library for two summers, mostly homework help. I write well when I care about the subject.')}
+                {artifactRow('Where I want to grow', 'Planning something myself instead of showing up to someone else\'s plan. Speaking in front of adults.')}
+                {artifactRow('Time', 'Four to five hours a week through the spring semester.')}
+                {artifactRow('Mastery (my notes)', 'Has tutored but never designed a session. Wants to know whether she is any good at teaching, not just whether she likes it.')}
+                {artifactRow('Identity (my notes)', 'Came in saying she needed something sustained for college applications, and said so plainly. By the end of the hour she was talking about one specific fourth grader at the library. Both are true at once.')}
+                {artifactRow('Creativity (my notes)', 'Has never made anything for a learner, a lesson, a worksheet, a game. Wants to.')}
               </div>
             </div>
-          )}
 
-          {/* ── STEP 3: MATCHES ── */}
-          {step === 3 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 03 / Matches</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Three partners,<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>chosen for you.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Ranked by alignment with the assessment. Each partner is vetted for safeguarding, project-readiness, and bilateral fit.
-              </p>
-              <div className="p-6 mb-12" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
-                <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>How we chose these</div>
-                <p className="text-sm leading-relaxed" style={{ color: c.ink }}>
-                  Selected interests ({Array.from(selectedTopics).map(t => TOPICS.find(x => x.id === t)?.label).filter(Boolean).join(', ')}) and skills ({Array.from(selectedSkills).join(', ')}) were weighed against each partner&apos;s stated needs and current openings.
-                </p>
-              </div>
-              <p className="text-xs mb-8" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
-                Organizations shown are illustrative examples.
-              </p>
-              <div className="space-y-5 mb-12">
-                {matches.map((o) => (
-                  <div key={o.id} className="gw-card p-6 md:p-8" style={{ background: chosenOrgId === o.id ? c.bgDeep : c.bg, border: `1px solid ${chosenOrgId === o.id ? c.ink : c.line}` }}>
-                    <div className="flex items-start justify-between gap-6 mb-5">
-                      <div className="flex items-start gap-4 flex-1 min-w-0">
-                        <div className="flex-shrink-0 flex items-center justify-center text-lg" style={{ width: '52px', height: '52px', background: c.ink, color: c.bg, fontFamily: serif, fontWeight: 500 }}>{o.initials}</div>
-                        <div className="min-w-0">
-                          <h3 className="text-xl md:text-2xl mb-1 leading-tight" style={{ fontFamily: serif, fontWeight: 500 }}>{o.name}</h3>
-                          <div className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>{o.category}</div>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0 text-right">
-                        <div className="text-3xl md:text-4xl" style={{ fontFamily: serif, fontWeight: 400, color: c.accent, lineHeight: 1 }}>{o.matchScore}%</div>
-                        <div className="text-xs uppercase mt-1" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 500 }}>Match</div>
-                      </div>
-                    </div>
-                    <p className="text-base leading-relaxed mb-4" style={{ color: c.ink }}>{o.description}</p>
-                    <div className="text-sm leading-relaxed mb-5 pl-4" style={{ color: c.inkSoft, borderLeft: `2px solid ${c.accent}` }}>
-                      <span style={{ fontWeight: 500, color: c.ink }}>Why this match: </span>{o.reasoning}
-                    </div>
-                    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-6 text-sm" style={{ color: c.inkSoft }}>
-                      <div className="flex items-center gap-2"><span style={{ color: c.accent }}>📍</span>{o.location}</div>
-                      <div className="flex items-center gap-2">
-                        <span style={{ color: c.accent }}>{o.mode === 'Remote' ? '💻' : o.mode === 'Onsite' ? '🏢' : '🔀'}</span>
-                        <span style={{ fontWeight: 500, color: c.ink }}>{o.mode}</span>
-                        <span>· {o.modeDetail}</span>
-                      </div>
-                      {o.needsNow && <div className="text-xs uppercase px-2.5 py-1" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.22em', fontWeight: 600 }}>Needs students now</div>}
-                    </div>
-                    <button
-                      onClick={() => selectOrg(o.id)}
-                      className="px-6 py-3 text-xs uppercase tracking-widest gw-cta org-select-btn"
-                      style={{ background: 'transparent', color: c.ink, border: `1px solid ${c.ink}`, fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans, transition: 'all 0.2s' }}
-                    >
-                      Select this Partner →
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back to Assessment</button>
-            </div>
-          )}
-
-          {/* ── STEP 4: SELECT (interstitial) ── */}
-          {step === 4 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 04 / Select</div>
-              <h1 className="text-4xl md:text-5xl mb-6 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                You&apos;ve selected<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400, color: c.accent }}>{org.name}.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-12 max-w-2xl" style={{ color: c.inkSoft }}>
-                Now let&apos;s start co-design, the structured process where you write a proposal, meet your partner, and shape your project together.
-              </p>
-
-              {/* 5 preview cards */}
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-12">
-                {[
-                  { icon: '✍️', label: 'Write your proposal', step: 5 },
-                  { icon: '📅', label: 'Schedule a meeting', step: 6 },
-                  { icon: '✓', label: 'Get partner confirmation', step: 7 },
-                  { icon: '💬', label: 'Have the conversation', step: 8 },
-                  { icon: '📄', label: 'Submit your final proposal', step: 9 },
-                ].map((card) => (
-                  <div key={card.step} className="p-4 text-center" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
-                    <div className="text-2xl mb-2">{card.icon}</div>
-                    <div className="text-xs leading-snug" style={{ color: c.inkSoft }}>{card.label}</div>
-                    <div className="text-xs mt-2 uppercase" style={{ letterSpacing: '0.18em', color: c.inkMuted, fontWeight: 500 }}>Step {card.step}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back to Matches</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Start Co-design →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 5: PROPOSE ── */}
-          {step === 5 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 05 / Propose</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Now write your proposal,<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>with a coach in the margin.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Students draft a 500-word proposal grounded in a 4-criteria rubric. Sage, our writing coach, gives feedback against each criterion but never writes for them.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                {/* LEFT: sample proposal */}
-                <div>
-                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Your Draft · {org.name}</div>
-                  <div className="p-6 mb-3 leading-relaxed text-sm" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '240px' }}>
-                    {org.sampleProposal}
-                  </div>
-                  <div className="flex justify-between text-xs" style={{ color: c.inkMuted }}>
-                    <span>129 / 500 words</span>
-                    <span style={{ color: c.accent }}>✓ Auto-saved</span>
-                  </div>
-                </div>
-
-                {/* RIGHT: tabs */}
-                <div>
-                  {/* Tab toggle */}
-                  <div className="flex gap-0 mb-4" style={{ border: `1px solid ${c.line}` }}>
-                    {[{ id: 'rubric', label: '💡 Rubric & Suggestions' }, { id: 'sage', label: '✓ Sage\'s Assessment' }].map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => setProposeTab(tab.id)}
-                        className="flex-1 py-2.5 text-xs gw-cta"
-                        style={{
-                          fontFamily: sans, fontWeight: 600, border: 'none', cursor: 'pointer',
-                          letterSpacing: '0.1em',
-                          background: proposeTab === tab.id ? (tab.id === 'sage' ? c.sageBg : c.accentSoft) : c.bg,
-                          color: proposeTab === tab.id ? c.ink : c.inkMuted,
-                          borderBottom: proposeTab === tab.id ? `2px solid ${tab.id === 'sage' ? '#5A7A4A' : c.accent}` : '2px solid transparent',
-                        }}
-                      >
-                        {tab.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Tab 1: Rubric & Suggestions */}
-                  {proposeTab === 'rubric' && (
-                    <div>
-                      {/* Banner */}
-                      <div className="p-3 mb-4 flex gap-2 items-start" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
-                        <span>💡</span>
-                        <div>
-                          <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.18em', color: c.accent, fontWeight: 600 }}>Suggestions from Sage</div>
-                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>These are examples of what strong proposals look like for each criterion. Use them as inspiration but don&apos;t copy them.</div>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        {CRITERIA.map((cr) => (
-                          <div key={cr.key} className="p-4" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
-                            <div className="text-xs uppercase mb-1" style={{ letterSpacing: '0.2em', color: c.accent, fontWeight: 700 }}>{cr.label}</div>
-                            <p className="text-xs leading-relaxed mb-3" style={{ color: c.inkSoft }}>{cr.desc}</p>
-                            {/* Strong example sub-block */}
-                            <div style={{ borderLeft: `2px solid ${c.accent}`, paddingLeft: '10px' }}>
-                              <div className="inline-flex items-center gap-1 px-2 py-0.5 mb-2 text-xs uppercase" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.15em', fontWeight: 600, borderRadius: '3px' }}>
-                                💡 Strong Example
-                              </div>
-                              <p className="text-xs leading-relaxed mb-2" style={{ fontStyle: 'italic', color: c.ink }}>
-                                &ldquo;{org.strongExamples[cr.key]}&rdquo;
-                              </p>
-                              <p className="text-xs" style={{ color: c.inkMuted, fontStyle: 'italic' }}>This is a suggestion. Your draft goes on the left.</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tab 2: Sage's Assessment */}
-                  {proposeTab === 'sage' && (
-                    <div>
-                      {/* Banner */}
-                      <div className="p-3 mb-4 flex gap-2 items-start" style={{ background: c.sageBg, border: `1px solid #C8D8C0` }}>
-                        <span>✓</span>
-                        <div>
-                          <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.18em', color: '#4A6E3A', fontWeight: 600 }}>Sage&apos;s Feedback on Your Draft</div>
-                          <div className="text-xs leading-relaxed" style={{ color: c.inkSoft }}>Personalized assessment based on what you wrote on the left. Updates as you revise.</div>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        {CRITERIA.map((cr) => (
-                          <div key={cr.key} className="p-4" style={{ border: `1px solid #C8D8C0`, background: '#F4F8F2' }}>
-                            <div className="text-xs uppercase mb-0.5" style={{ letterSpacing: '0.2em', color: '#4A6E3A', fontWeight: 700 }}>{cr.label}</div>
-                            <div className="text-xs uppercase mb-2" style={{ letterSpacing: '0.12em', color: c.inkMuted, fontWeight: 500 }}>Sage · Writing Coach</div>
-                            <p className="text-xs leading-relaxed" style={{ color: c.ink, fontStyle: 'italic' }}>
-                              &ldquo;{org.sageAssessment[cr.key]}&rdquo;
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Bottom note (both tabs) */}
-                  <p className="text-xs mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
-                    In a real placement, Sage&apos;s feedback updates in real time as the student writes. Strong examples remain static reference points.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Scheduling →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 6: SCHEDULE ── */}
-          {step === 6 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 06 / Schedule</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                Book the kickoff meeting.
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Once the proposal is submitted, students pick a 30-minute intro call with the partner organization. The partner confirms or asks for revision.
-              </p>
-
-              <div className="mb-8">
-                <div className="text-xs uppercase mb-4" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>
-                  Week of June 9, 2026 · {org.name}
-                </div>
-                <div className="grid grid-cols-3 gap-2 mb-6">
-                  {[
-                    { day: 'Mon 9', time: '4:00 PM', state: 'available' },
-                    { day: 'Mon 9', time: '5:30 PM', state: 'taken' },
-                    { day: 'Tue 10', time: '3:30 PM', state: 'selected' },
-                    { day: 'Tue 10', time: '5:00 PM', state: 'available' },
-                    { day: 'Wed 11', time: '4:00 PM', state: 'available' },
-                    { day: 'Thu 12', time: '3:30 PM', state: 'taken' },
-                    { day: 'Thu 12', time: '5:00 PM', state: 'available' },
-                    { day: 'Fri 13', time: '3:00 PM', state: 'available' },
-                    { day: 'Fri 13', time: '4:30 PM', state: 'taken' },
-                  ].map((slot, i) => (
-                    <div key={i} className={slot.state === 'available' ? 'slot-available' : ''} style={{ padding: '14px 12px', border: slot.state === 'selected' ? `2px solid ${c.accent}` : `1px solid ${c.line}`, background: slot.state === 'selected' ? c.accentSoft : slot.state === 'taken' ? '#F5F0E8' : c.bg, opacity: slot.state === 'taken' ? 0.45 : 1, textAlign: 'center', transition: 'border-color 0.2s' }}>
-                      <div className="text-xs uppercase mb-1" style={{ letterSpacing: '0.15em', color: slot.state === 'selected' ? c.accent : c.inkMuted, fontWeight: 600 }}>{slot.day}</div>
-                      <div className="text-sm" style={{ fontWeight: slot.state === 'selected' ? 600 : 400, color: slot.state === 'taken' ? c.inkMuted : c.ink }}>{slot.time}</div>
-                      {slot.state === 'taken' && <div className="text-xs mt-1" style={{ color: c.inkMuted }}>Taken</div>}
-                      {slot.state === 'selected' && <div className="text-xs mt-1" style={{ color: c.accent, fontWeight: 600 }}>✓ Selected</div>}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="p-5 flex gap-4 items-start" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
-                  <span style={{ fontSize: '20px' }}>📅</span>
-                  <div>
-                    <div className="text-sm mb-1" style={{ color: c.ink, fontWeight: 600 }}>Tuesday June 10, 3:30 PM · 30 min with {org.name}</div>
-                    <div className="text-sm" style={{ color: c.inkSoft }}>Zoom link sent on confirmation</div>
-                  </div>
-                </div>
-                <p className="text-sm mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
-                  Before the call: jot down 3 things you&apos;re excited to work on and 2 questions for the partner.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Org Review →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 7: ORG REVIEW ── */}
-          {step === 7 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 07 / Org Review</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                The org reviews and confirms.
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Partner organizations see the proposal and meeting request together. They accept, request a revision, or suggest a different time.
-              </p>
-
-              <div className="flex gap-2 mb-8">
-                {['waiting', 'accepted'].map((state) => (
-                  <button key={state} onClick={() => setOrgReviewState(state)} className="px-5 py-2 text-xs uppercase gw-cta"
-                    style={{ letterSpacing: '0.18em', fontWeight: 600, fontFamily: sans, background: orgReviewState === state ? c.ink : 'transparent', color: orgReviewState === state ? c.bg : c.inkMuted, border: `1px solid ${orgReviewState === state ? c.ink : c.line}`, cursor: 'pointer' }}>
-                    {state === 'waiting' ? 'Waiting State' : 'Accepted State'}
-                  </button>
-                ))}
-              </div>
-
-              {orgReviewState === 'waiting' && (
-                <div className="p-8 max-w-xl" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
-                  <div className="text-4xl mb-4">⏳</div>
-                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400 }}>Waiting for {org.name}</div>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>Your proposal and meeting request have been sent. Partners typically respond within 48 hours.</p>
-                  <ul className="space-y-2 text-sm" style={{ color: c.ink }}>
-                    {['Proposal submitted', 'Meeting requested: Tue June 10, 3:30 PM', 'CV attached'].map((item) => (
-                      <li key={item} className="flex gap-3 items-center"><span style={{ color: c.accent }}>✓</span><span>{item}</span></li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {orgReviewState === 'accepted' && (
-                <div className="p-8 max-w-xl" style={{ border: `1px solid ${c.accent}`, background: c.bg }}>
-                  <div className="text-4xl mb-4">✅</div>
-                  <div className="text-xl mb-2" style={{ fontFamily: serif, fontWeight: 400, color: c.accent }}>{org.name} accepted!</div>
-                  <p className="text-sm leading-relaxed mb-6" style={{ color: c.inkSoft }}>Meeting confirmed for Tuesday June 10, 3:30 PM. Zoom link sent to your email.</p>
-                  <div className="p-4 text-sm leading-relaxed" style={{ background: c.accentSoft, color: c.ink }}>
-                    🎙 {org.confirmationNote}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-col sm:flex-row gap-3 mt-8">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Meeting →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 8: MEETING ── */}
-          {step === 8 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 08 / Meeting</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                The conversation that<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>shapes the project.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                Students and partners meet for 30 minutes. Gateway captures key points so the student can write a refined final proposal afterward.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-10 mb-10">
-                <div>
-                  <div className="flex gap-4 mb-6">
-                    {[{ initials: 'JL', label: 'Jamie Lee', sub: 'Sample student' }, { initials: org.initials, label: org.name, sub: 'Partner org' }].map((p) => (
-                      <div key={p.initials} className="flex-1 text-center">
-                        <div className="flex items-center justify-center mx-auto mb-3 text-2xl" style={{ width: '72px', height: '72px', background: c.bgDeep, border: `1px solid ${c.line}`, fontFamily: serif, fontWeight: 500, color: c.ink }}>
-                          {p.initials}
-                        </div>
-                        <div className="text-sm font-medium" style={{ color: c.ink, fontWeight: 600 }}>{p.label}</div>
-                        <div className="text-xs" style={{ color: c.inkMuted }}>{p.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-center mb-4">
-                    <div className="text-3xl mb-2" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '0.05em', color: c.ink }}>00:18:42</div>
-                    <div className="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase" style={{ background: c.accentSoft, color: c.accent, letterSpacing: '0.18em', fontWeight: 600, borderRadius: '999px' }}>
-                      <span style={{ fontSize: '8px' }}>●</span> Recording &amp; transcribing
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-xs uppercase mb-4" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Live Highlights</div>
-                  <ul className="space-y-4">
-                    {org.meetingHighlights.map((item, i) => (
-                      <li key={i} className="flex gap-3 text-sm leading-relaxed" style={{ color: c.ink }}>
-                        <span style={{ color: c.accent, flexShrink: 0, fontWeight: 600 }}>—</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-sm mt-6" style={{ color: c.inkMuted, fontStyle: 'italic' }}>
-                    After the meeting, the student writes their final proposal with these insights as a guide.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={goNext} className={`${btnClass} gw-cta-primary`} style={btnPrimary}>Continue to Final →</button>
-              </div>
-            </div>
-          )}
-
-          {/* ── STEP 9: FINAL ── */}
-          {step === 9 && (
-            <div className="gw-fade">
-              <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>Step 09 / Final</div>
-              <h1 className="text-4xl md:text-5xl mb-4 leading-[1.1]" style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}>
-                From conversation<br /><span style={{ fontStyle: 'italic', fontWeight: 400 }}>to commitment.</span>
-              </h1>
-              <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: c.inkSoft }}>
-                After the meeting, the student writes a final proposal incorporating what they learned. Sage asks questions and students write the answers.
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-8 mb-10">
-                <div>
-                  <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>Final Proposal Draft · {org.name}</div>
-                  <div className="p-6 mb-3 leading-relaxed text-sm" style={{ background: c.bg, border: `1px solid ${c.line}`, color: c.ink, minHeight: '200px' }}>
-                    {org.finalProposalDraft}
-                  </div>
-                  <div className="flex justify-between text-xs" style={{ color: c.inkMuted }}>
-                    <span>187 / 500 words</span>
-                    <span style={{ color: c.accent }}>✓ Auto-saved</span>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div>
-                    <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.inkMuted, fontWeight: 600 }}>From Your Meeting</div>
-                    <ul className="space-y-2 text-sm" style={{ color: c.inkSoft }}>
-                      {org.meetingInsights.map((item, i) => (
-                        <li key={i} className="flex gap-3"><span style={{ color: c.accent }}>—</span><span>{item}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="p-5" style={{ background: c.bgDeep, border: `1px solid ${c.line}` }}>
-                    <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>Sage · Final Proposal Coach</div>
-                    <ul className="space-y-3 text-sm" style={{ color: c.ink }}>
-                      {org.sageQuestions.map((q, i) => (
-                        <li key={i} className="flex gap-3 leading-relaxed">
-                          <span style={{ color: c.accent, flexShrink: 0 }}>→</span>
-                          <span>{q}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="text-xs mt-4" style={{ color: c.inkMuted, fontStyle: 'italic' }}>Sage asks questions. The student writes the proposal.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-8 mb-10 text-center" style={{ background: c.accentSoft, border: `1px solid ${c.line}` }}>
-                <div className="text-xs uppercase mb-3" style={{ letterSpacing: '0.22em', color: c.accent, fontWeight: 600 }}>This is what Gateway produces</div>
-                <p className="text-sm leading-relaxed mb-6 max-w-xl mx-auto" style={{ color: c.ink }}>
-                  A documented, structured, measurable placement: a real project brief, a real partner, and a real outcome. Start a conversation to learn more.
-                </p>
-                <a href="/contact" className={`${btnClass} gw-cta-primary inline-block`} style={{ ...btnPrimary, textDecoration: 'none' }}>
-                  Get in Touch →
-                </a>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button onClick={goBack} className={`${btnClass} gw-cta-outline`} style={btnOutline}>← Back</button>
-                <button onClick={restart} className="px-8 py-4 text-xs uppercase tracking-widest" style={{ background: 'transparent', color: c.inkSoft, border: 'none', fontWeight: 500, letterSpacing: '0.2em', fontFamily: sans, cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
-                  Restart Walkthrough
-                </button>
-              </div>
-            </div>
-          )}
-
+            {statusLine('The profile format exists and has been used in interviews with students. It has not yet been the start of a placement.')}
+          </div>
         </div>
-      </main>
+      </section>
 
-      <footer className="px-6 md:px-12 py-8 mt-12" style={{ borderTop: `1px solid ${c.line}` }}>
-        <div className="max-w-6xl mx-auto flex justify-between items-center text-xs" style={{ color: c.inkMuted }}>
-          <div>Gateway Impact Lab · Co-design Tool</div>
-          <div>© 2026 Gateway Impact Lab</div>
+      {/* Section 02: Match */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              02 / Match
+            </div>
+          </div>
+          <div className="col-span-12 md:col-span-9 space-y-10">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              I keep a list of organizations whose day-to-day work could overlap with a profile like this one, and I talk with two or three of them about the student before anything is proposed. The pairing is a judgment about fit on both sides, made in conversation, and either side can say no. For Jamie the overlap was with a literacy organization that already runs reading groups for fourth and fifth graders and needs more hands in the room, not with the organizations that would have given her the most hours or the most impressive name.
+            </p>
+
+            {/* Artifact */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+              {artifactLabel('The Pairing · Bay Vista Literacy, East San Jose')}
+              <div className="space-y-0">
+                {artifactRow('What they do', 'Reading groups for fourth and fifth graders two afternoons a week, run by two staff and whatever volunteers turn up.')}
+                {artifactRow('What they need', 'Someone who comes every week, prepares, and can take a group of four so the staff can work with the children who are furthest behind.')}
+                {artifactRow('Why this pairing', "Jamie's reason for caring is their work. Their constraint, continuity, is the thing she said she wanted to practice.")}
+                {artifactRow('The person', 'Mara, who runs the afternoon program and would be the one Jamie plans with.')}
+              </div>
+            </div>
+
+            {statusLine('The organizations I have spoken with described needs like this one. No pairing has yet been made.')}
+          </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Section 03: Co-design */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              03 / Co-design
+            </div>
+          </div>
+          <div className="col-span-12 md:col-span-9 space-y-10">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              Jamie, Mara, and I meet once for about an hour. I ask the questions, they answer them, and I write down what they agree to. The point of the questions is to make the tension visible between what Jamie wants to learn and what Bay Vista needs done, early, where it can be worked out, instead of three weeks in. What comes out is a brief both sides sign.
+            </p>
+
+            {/* Artifact 1: Q&A */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}` }}>
+              {artifactLabel('The questions, and what each side said')}
+              <div className="space-y-8">
+
+                {/* Q1 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    1. What does a good semester look like for each of you, separately?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Jamie</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>I planned the sessions myself, and the kids in my group can read something in May they couldn&apos;t in January.</p>
+                    </div>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Mara</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>A volunteer who shows up every single week so I can stop re-teaching routines, and my two furthest-behind kids get real time with me.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q2 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    2. Where do those two pictures pull against each other?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Jamie</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>I want to design things. You need someone reliable who follows your routine.</p>
+                    </div>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Mara</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>Right. I don&apos;t have time to review new lesson plans every week.</p>
+                    </div>
+                    <div className="pt-1" style={{ color: c.inkSoft }}>
+                      <div style={{ ...sc, color: c.accent, marginBottom: '0.25rem' }}>Agreed</div>
+                      <p className="text-sm leading-relaxed">Jamie follows the existing routine for the first four weeks, then designs the comprehension part of each session from week five, with Mara looking at the plan the Friday before.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q3 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    3. What would make this not worth it for the organization?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Mara</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>Missed weeks. One missed week with these kids costs me two.</p>
+                    </div>
+                    <div className="pt-1" style={{ color: c.inkSoft }}>
+                      <div style={{ ...sc, color: c.accent, marginBottom: '0.25rem' }}>Agreed</div>
+                      <p className="text-sm leading-relaxed">A fixed day and time. If Jamie has to miss, she tells Mara by Wednesday and the week is made up, not skipped.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q4 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    4. What would make this not worth it for the student?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Jamie</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>If I&apos;m just handing out worksheets for four months.</p>
+                    </div>
+                    <div className="pt-1" style={{ color: c.inkSoft }}>
+                      <div style={{ ...sc, color: c.accent, marginBottom: '0.25rem' }}>Agreed</div>
+                      <p className="text-sm leading-relaxed">The design role from week five is in the brief, not a maybe.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q5 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    5. How will each of you know, at the end, whether it worked?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Mara</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>Bay Vista already tracks reading levels each term. If her group moves like the others or better, it worked. And whether I&apos;d take her back.</p>
+                    </div>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Jamie</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>If I can show the sessions I built and say what I&apos;d change.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q6 */}
+                <div>
+                  <p className="text-base mb-4" style={{ fontWeight: 500, color: c.ink }}>
+                    6. What does each of you need from the other to make that happen?
+                  </p>
+                  <div className="space-y-3 pl-4" style={{ borderLeft: `2px solid ${c.line}` }}>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Jamie</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>Fifteen minutes with Mara after each session.</p>
+                    </div>
+                    <div>
+                      <div style={{ ...sc, color: c.inkMuted, marginBottom: '0.25rem' }}>Mara</div>
+                      <p className="text-sm leading-relaxed" style={{ color: c.ink }}>A short written note each week on what happened in the group, so I&apos;m not relying on memory when I write the end-of-term report.</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Artifact 2: Brief */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}` }}>
+              {artifactLabel('The brief both sides sign')}
+              <div className="space-y-0">
+                {artifactRow('Project', 'Lead a reading group of four fourth graders at Bay Vista Literacy, Tuesdays and Thursdays, 3:30 to 5:00, January through May.')}
+                {artifactRow('The need it meets', 'Continuity for one group, and staff time freed for the children furthest behind.')}
+                {artifactRow('The growth it is built around', 'Designing the comprehension segment from week five onward (mastery and creativity); running a group of her own and reporting on it to an adult who depends on the work (identity).')}
+                {artifactRow('Jamie commits to', 'Every session, preparation on Mondays, and a short note each week.')}
+                {artifactRow("Bay Vista commits to", "Mara's fifteen minutes after each session, her read of the plan from week five, and the term's reading-level numbers for the group.")}
+                {artifactRow('I commit to', "A check-in with Jamie every week for the first month and every two weeks after that, and the end-of-term write-up with both of them.")}
+                {artifactRow('How it will be judged', "Bay Vista's own reading-level numbers for the group; Mara's answer to whether she would take Jamie back; Jamie's record of the sessions she designed and what she changed.")}
+                {artifactRow('Agreed to by', 'Jamie Lee; Mara, for Bay Vista Literacy; Long Trinh.')}
+              </div>
+            </div>
+
+            {statusLine('The questions and the brief exist and have been run on sample pairings only. This meeting has not yet happened with a real student and a real organization.')}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 04: Document */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              04 / Document
+            </div>
+          </div>
+          <div className="col-span-12 md:col-span-9 space-y-10">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              The record is kept while the work happens, not written afterward. Three things go into it: Jamie&apos;s short weekly notes, Mara&apos;s feedback at the midpoint and at the end, and a competency tracker I fill in with Jamie against the three strands every few weeks, which she can disagree with. At the end, Jamie writes a short narrative of the project with the whole record in front of her, and Mara&apos;s account sits next to it. A school counselor or an admissions reader who picked this up would see what was planned, what happened, what the organization got, and what Jamie thinks she learned, in that order.
+            </p>
+
+            {/* Artifact 1 */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+              {artifactLabel("Week 6 · Jamie's note")}
+              <p className="text-sm leading-relaxed" style={{ color: c.ink }}>
+                First week running my own comprehension segment. I used a prediction game I made and it went badly with two of the kids because the passage was too long. Mara said the idea was right and the passage was wrong. Next week, half the length. One thing I noticed: I&apos;m less nervous talking to Mara now than I was in January, and I didn&apos;t think that was something I&apos;d learn here.
+              </p>
+            </div>
+
+            {/* Artifact 2 */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+              {artifactLabel("Midpoint · Mara's feedback")}
+              <p className="text-sm leading-relaxed" style={{ color: c.ink }}>
+                Has not missed a session. The group&apos;s routine is solid, which has given me the time with my two kids I asked for. The new comprehension segments need shorter passages, and she already knows that. Would I take her back: yes, and I&apos;d give her a bigger group.
+              </p>
+            </div>
+
+            {/* Artifact 3 */}
+            <div className="p-6 md:p-8" style={{ border: `1px solid ${c.line}`, background: c.bg }}>
+              {artifactLabel('Competency tracker · Week 8, excerpt')}
+              <div className="space-y-0">
+                {artifactRow('Mastery', 'Can run a routine without prompting; has designed three segments; cannot yet judge passage difficulty for this age, and knows it.')}
+                {artifactRow('Identity', 'Describes herself as "the person who runs the Tuesday group," which she did not in January. Still names college applications as a reason she is here, less often.')}
+                {artifactRow('Creativity', 'Three original segments, one of which Bay Vista kept for other volunteers.')}
+              </div>
+            </div>
+
+            {statusLine('The weekly note, the feedback form, and the tracker exist and were developed in coursework. They have never been used across a full placement. This is the part of the method I most want to test, and the part I trust least until it has been compared with how students write about the same work when nobody is keeping a record.')}
+          </div>
+        </div>
+      </section>
+
+      {/* Closing section */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              What this doesn&apos;t show
+            </div>
+          </div>
+          <div className="col-span-12 md:col-span-8 space-y-10">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              Whether any of it holds up. Whether a student who came for the application line ends up owning the work, whether a reader who does not know how the record was made finds it more credible than an essay, and whether Bay Vista would say, at the end, that it got real work rather than a well-documented visitor. Those are the questions on the home page, and they are the reason this needs a study rather than a nicer demo.
+            </p>
+            <div>
+              <a
+                href="/"
+                className="text-base gw-link"
+                style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px' }}
+              >
+                ← Back to the question
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <SharedFooter c={c} serif={serif} />
     </div>
   );
 }

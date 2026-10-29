@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import SharedFooter from './components/SharedFooter';
 
 export default function GatewayHome() {
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function GatewayHome() {
     {
       num: '02',
       title: 'Match',
-      text: "The student is paired with an organization whose actual work overlaps with those goals. The pairing comes from a conversation about fit on both sides, not from a list.",
+      text: "The student is paired with an organization whose day-to-day work overlaps with those goals. The pairing comes from a conversation about fit on both sides, not from a list.",
     },
     {
       num: '03',
@@ -53,10 +54,10 @@ export default function GatewayHome() {
   ];
 
   const tried = [
-    'A working prototype of the co-design process, built to see whether a student and an organization could scope a project together with light facilitation.',
-    "A reflection and competency-tracking toolkit developed during my master's at Harvard, covering discovery, co-design briefs, weekly reflection, and a final narrative.",
+    'A clickable prototype of the co-design conversation, built with sample data to work out what the questions should be and what both sides need to put on the table before a project is scoped. It has been through three versions. The first was a matching tool, and a teaching fellow pointed out that matching is logistics and the learning, if there is any, happens when the two sides negotiate what the work will be, so I rebuilt it around that conversation. A thirteen year old I interviewed told me that ordinary service tasks felt like a waste of time, which is why the planning now happens before any service starts.',
+    "A set of reflection and competency-tracking protocols developed during my master's at Harvard, covering discovery, co-design briefs, weekly reflection, partner feedback, and a final narrative.",
     'Conversations with organizations that host student volunteers, which confirmed the pattern above and produced offers of case data and placement access for future study.',
-    'No student has yet gone through the full cycle. That is the next step, and the reason this page exists.',
+    'No student has gone through the full cycle yet. Finding out what happens when one does takes a comparison with the normal way of doing service hours, measures I did not design myself, and the freedom to publish a result that goes against my own design, which is why I want to do it inside a research program.',
   ];
 
   const questions = [
@@ -118,7 +119,7 @@ export default function GatewayHome() {
               Co-design Walkthrough
             </a>
             <a
-              href="mailto:long_trinh@gse.harvard.edu"
+              href="/contact"
               className="text-xs uppercase tracking-widest gw-link"
               style={{ color: c.ink, fontWeight: 500 }}
             >
@@ -128,7 +129,7 @@ export default function GatewayHome() {
         </div>
       </nav>
 
-      {/* Section 1 — Opening question */}
+      {/* Section 1: Opening question */}
       <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-24 md:pb-32" style={{ borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-4xl mx-auto">
           <div className="text-sm mb-10" style={{ color: c.inkSoft }}>
@@ -138,12 +139,12 @@ export default function GatewayHome() {
             className="text-2xl md:text-3xl lg:text-4xl leading-[1.35]"
             style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em', color: c.ink }}
           >
-            Nearly every high school requires service, and most of it changes nothing, for the student or for the organization. The students know an admissions reader is watching, so they perform. The organizations know the student is leaving in two weeks, so they don&apos;t invest. I want to know what has to change in how a project is designed, who designs it, and what gets recorded along the way, so that both sides actually get something out of it, and so that a school can tell the difference.
+            Most high schools ask students for service hours, the IB requires them, and nearly every college application has a place to list them. The hours get recorded. What rarely gets recorded is whether anything changed, for the student or for the organization. The students know an admissions reader is watching, so they perform. The organizations know the student is leaving in two weeks, so they don&apos;t invest. I want to know what has to change in how a project is designed, who designs it, and what gets recorded along the way, so that both sides get something out of it, and so that a school can tell the difference.
           </p>
         </div>
       </section>
 
-      {/* Section 2 — Where the question comes from */}
+      {/* Section 2: Where the question comes from */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -156,25 +157,19 @@ export default function GatewayHome() {
           </div>
           <div className="col-span-12 md:col-span-8 space-y-6 text-lg leading-relaxed" style={{ color: c.ink }}>
             <p>
-              I&apos;m a Saigon South International School graduate. Junior year, I spent
-              Saturdays teaching English at orphanages around Ho Chi Minh City. I had
-              no curriculum, no continuity, no way to measure whether any of it stuck.
-              By the end of the year, I knew the answer: it hadn&apos;t.
+              I went to Saigon South International School, an IB school in Ho Chi Minh City. Junior year, for my service hours, I spent Saturdays teaching English at orphanages around the city. I had no curriculum, no continuity, no way to measure whether any of it stuck. By the end of the year, I knew the answer: it hadn&apos;t.
             </p>
             <p>
-              Senior year, I tried something else. A few classmates and I started a
-              club called Bliss 4 Youth that worked with the children of our school&apos;s
-              local staff. We met weekly, built a real curriculum, and tracked progress
-              over the year. Every student left with improved English.
+              Senior year, I tried something else. A few classmates and I started a club called Bliss 4 Youth that worked with the children of our school&apos;s local staff. We met weekly and built a real curriculum. We did not measure what happened the way I would now, but every one of those children left writing and speaking better English than when we started, and the difference was plain to anyone who had been in the room.
             </p>
             <p>
-              When I went back to that question years later, every organization I spoke with that hosts student volunteers described the same pattern: placements of a week or two, students who come and go, no continuity, and nothing either side could point to afterward. More than one said they had never been satisfied with the quality of these programs and would share whatever they had if someone was willing to redesign them.
+              When I went back to that question years later, every organization I spoke with that hosts student volunteers, around twenty of them, described the same pattern: placements of a week or two, students who come and go, no continuity, and nothing either side could point to afterward. More than one said they had never been satisfied with the quality of these programs and would share whatever they had if someone was willing to redesign them.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Section 3 — What I'm proposing */}
+      {/* Section 3: What I'm proposing */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -218,14 +213,14 @@ export default function GatewayHome() {
                 className="text-base gw-link"
                 style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px' }}
               >
-                See one co-design conversation →
+                Follow one project through the four moves →
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 4 — What I've tried so far */}
+      {/* Section 4: What I've tried so far */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -237,12 +232,12 @@ export default function GatewayHome() {
             </div>
           </div>
           <div className="col-span-12 md:col-span-8">
-            <ul className="space-y-8">
+            <ul className="space-y-0">
               {tried.map((item, i) => (
                 <li
                   key={i}
-                  className="flex gap-6 text-lg leading-relaxed pb-8"
-                  style={{ borderBottom: i < tried.length - 1 ? `1px solid ${c.line}` : 'none', color: c.ink }}
+                  className="flex gap-6 text-lg leading-relaxed py-8"
+                  style={{ borderBottom: `1px solid ${c.line}`, color: c.ink }}
                 >
                   <span
                     className="text-xs uppercase pt-1.5 flex-shrink-0"
@@ -258,7 +253,7 @@ export default function GatewayHome() {
         </div>
       </section>
 
-      {/* Section 5 — What I don't know yet */}
+      {/* Section 5: What I don't know yet */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -276,11 +271,11 @@ export default function GatewayHome() {
             >
               Three questions I can&apos;t answer from a prototype
             </h2>
-            <div className="space-y-10">
+            <div className="space-y-0">
               {questions.map((q, i) => (
                 <div
                   key={i}
-                  className="pt-10 text-lg leading-relaxed"
+                  className="py-10 text-lg leading-relaxed"
                   style={{ borderTop: `1px solid ${c.line}`, color: c.inkSoft }}
                 >
                   <strong style={{ color: c.ink, fontWeight: 500 }}>{q.lead}</strong>{' '}{q.body}
@@ -291,7 +286,7 @@ export default function GatewayHome() {
         </div>
       </section>
 
-      {/* Section 6 — Partner organizations */}
+      {/* Section 6: How I would find out */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-3">
@@ -299,51 +294,43 @@ export default function GatewayHome() {
               className="text-xs uppercase md:sticky md:top-24"
               style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}
             >
-              Partner organizations
+              How I would find out
             </div>
           </div>
-          <div className="col-span-12 md:col-span-8">
+          <div className="col-span-12 md:col-span-9">
+            <h2
+              className="text-3xl md:text-5xl mb-12 leading-[1.1]"
+              style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
+            >
+              What it would take to answer them
+            </h2>
             <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
-              Organizations that host students are co-researchers in this work, not placement sites. Each project is scoped around something they actually need done, and their account of whether the work mattered is part of the evidence.
+              Two or three rounds of design and revision in Bay Area high schools, comparing placements where the student plans the work with the organization against conventional placements, and looking at three things: how students describe their ownership of the work, in interviews and in the record itself; whether counselors and admissions readers find the records credible and comparable when they rate them without knowing which kind of placement produced them; and whether the organizations say the work was useful to them, which has been the rule from the start, that no placement counts as a success unless the partner says so. The tracking protocols I built have never been checked against anything, so I would use them alongside established measures of youth purpose and agency. Running the study in an independent school and a large public district would show whether the method depends on resources a school already has, and I work in East San Jose public schools now, so the second kind of site is one I already see from the inside.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-12 lg:px-20 py-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-2xl" style={{ fontFamily: serif, fontWeight: 500 }}>Gateway</span>
-              <span style={{ color: c.accent, fontFamily: serif }}>·</span>
-              <span className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkSoft, fontWeight: 500 }}>Impact Lab</span>
-            </div>
-            <div className="text-sm mb-3" style={{ color: c.inkSoft }}>San Francisco Bay Area · Cambridge, MA</div>
-            <div className="flex gap-6 text-sm" style={{ color: c.inkMuted }}>
-              <a
-                href="https://www.linkedin.com/in/long-trinh-47b61042/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="gw-link"
-                style={{ color: c.inkMuted }}
-              >
-                LinkedIn
-              </a>
-              <a
-                href="mailto:long_trinh@gse.harvard.edu"
-                className="gw-link"
-                style={{ color: c.inkMuted }}
-              >
-                long_trinh@gse.harvard.edu
-              </a>
+      {/* Section 7: The organizations' side */}
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-32" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div
+              className="text-xs uppercase md:sticky md:top-24"
+              style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}
+            >
+              The organizations&apos; side
             </div>
           </div>
-          <div className="text-xs" style={{ color: c.inkMuted }}>
-            © 2026 Gateway Impact Lab
+          <div className="col-span-12 md:col-span-8">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              Organizations that host students are co-researchers in this work, not placement sites. Each project is scoped around something they need done, and their account of whether the work mattered is part of the evidence. I am not naming the organizations I have spoken with until they have agreed to be named.
+            </p>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <SharedFooter c={c} serif={serif} />
     </div>
   );
 }

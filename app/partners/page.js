@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import SharedFooter from '../components/SharedFooter';
 
-export default function PartnersPage() {
+export default function ForOrganizations() {
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const fontLink = document.createElement('link');
@@ -29,34 +30,18 @@ export default function PartnersPage() {
     line: '#D9CFB8',
   };
 
-  const benefits = [
-    {
-      title: 'A student who actually wants to be there',
-      body: "Every student placed through Gateway has gone through a structured assessment process, written a proposal tailored to your organization, and committed to a specific project. No generic volunteers, no one doing hours for a checkbox.",
-    },
-    {
-      title: 'A project scoped around your real needs',
-      body: "The co-design process means you and the student define the project together: what you need, what they can deliver, and what success looks like. The final brief is a mutual commitment, not a form.",
-    },
-    {
-      title: 'Ongoing support and accountability',
-      body: "I provide weekly check-ins with the student and am available to organizations throughout the placement. If something isn't working, we fix it early. I don't disappear after the match.",
-    },
-    {
-      title: 'Documentation at the end',
-      body: "Every placement closes with a structured outcome report covering what the student did, what was delivered, and what was measured. Something you can point to for your own impact reporting.",
-    },
-    {
-      title: 'No cost, ever',
-      body: "Community partners join Gateway free of charge. Always.",
-    },
+  const asks = [
+    'One person who can sit in a one-hour planning conversation at the start and spend about fifteen minutes with the student after each session.',
+    'A real need, something you would want done whether or not a student turned up, not a willingness to host.',
+    'A conversation with me about how you keep young volunteers safe, and the policies you already have.',
+    'Your account of the work, twice: at the midpoint and at the end, in a few sentences each, including whether you would take the student back.',
   ];
 
-  const criteria = [
-    'Clear safeguarding policies for student volunteers',
-    'At least one staff member available for regular project check-ins',
-    'A real operational need, not just a willingness to host',
-    'Based in or serving the San Francisco Bay Area',
+  const gets = [
+    'A project scoped around your need, planned with you before the student starts, and written down in a brief both sides sign.',
+    'A student who chose this and committed to a fixed schedule, with me checking in on them so that problems surface early.',
+    'A short written account at the end of what was done and what you said about it, which you check before it goes anywhere.',
+    'A say in the research. Your judgment of whether the work was useful is part of the evidence, not a satisfaction survey, and you are named only if you choose to be.',
   ];
 
   return (
@@ -72,8 +57,6 @@ export default function PartnersPage() {
       <style>{`
         .gw-link { transition: color 0.2s; }
         .gw-link:hover { color: ${c.accent}; }
-        .gw-cta-dark { transition: background 0.2s; }
-        .gw-cta-dark:hover { background: #2C2521; }
       `}</style>
 
       {/* Nav */}
@@ -95,106 +78,60 @@ export default function PartnersPage() {
               Impact Lab
             </span>
           </a>
-          <div className="flex items-center gap-6 md:gap-10">
-            <a href="/" className="text-xs uppercase tracking-widest hidden md:inline gw-link" style={{ color: c.ink, fontWeight: 500 }}>Home</a>
-            <a href="/co-design" className="text-xs uppercase tracking-widest hidden md:inline gw-link" style={{ color: c.ink, fontWeight: 500 }}>Co-design Tool</a>
-            <a href="/contact" className="text-xs uppercase tracking-widest hidden md:inline gw-link" style={{ color: c.ink, fontWeight: 500 }}>Contact</a>
-            <a
-              href="/contact"
-              className="px-5 py-2.5 text-xs uppercase tracking-widest gw-cta-dark"
-              style={{ background: c.ink, color: c.bg, fontWeight: 500 }}
-            >
-              Get in Touch
-            </a>
-          </div>
+          <a
+            href="/contact"
+            className="text-xs uppercase tracking-widest gw-link"
+            style={{ color: c.ink, fontWeight: 500 }}
+          >
+            Contact
+          </a>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-20 md:pb-28">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-xs uppercase mb-8" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
-            — Community Partners
-          </div>
-          <h1
-            className="text-5xl md:text-7xl leading-[1.02] mb-10 max-w-5xl"
-            style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.02em' }}
-          >
-            Real work for<br />
-            <em style={{ fontWeight: 400, color: c.accent }}>real organizations.</em>
-          </h1>
-          <p className="text-lg md:text-xl max-w-2xl leading-relaxed" style={{ color: c.inkSoft }}>
-            Gateway partners with Bay Area nonprofits and community organizations to place
-            students in meaningful, scoped projects. Partners join free of charge.
-          </p>
-        </div>
-      </section>
-
-      {/* What partners get */}
-      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderTop: `1px solid ${c.line}`, background: c.bgDeep }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16 max-w-3xl">
-            <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
-              What Partners Get
-            </div>
-            <h2
-              className="text-3xl md:text-5xl leading-[1.1]"
-              style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
-            >
-              More than a volunteer.{' '}
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>A project partner.</span>
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {benefits.map((b) => (
-              <div
-                key={b.title}
-                className="p-8"
-                style={{ background: c.bg, border: `1px solid ${c.line}` }}
-              >
-                <h3
-                  className="text-xl md:text-2xl mb-4 leading-[1.2]"
-                  style={{ fontFamily: serif, fontWeight: 400 }}
-                >
-                  {b.title}
-                </h3>
-                <p className="text-base leading-relaxed" style={{ color: c.inkSoft }}>
-                  {b.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Partner criteria */}
-      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderTop: `1px solid ${c.line}` }}>
+      {/* Header */}
+      <section className="px-6 md:px-12 lg:px-20 pt-24 md:pt-32 pb-20 md:pb-28" style={{ borderBottom: `1px solid ${c.line}` }}>
         <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
-          <div className="col-span-12 md:col-span-5">
-            <div className="text-xs uppercase mb-6" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
-              Partner Criteria
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              For organizations
             </div>
-            <h2
-              className="text-3xl md:text-4xl leading-[1.1] mb-8"
-              style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h1
+              className="text-4xl md:text-6xl mb-10 leading-[1.05]"
+              style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.02em' }}
             >
-              What I look for in<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400 }}>a placement partner.</span>
-            </h2>
-            <p className="text-base leading-relaxed" style={{ color: c.inkSoft }}>
-              Every partner is vetted before a student is placed. The process is straightforward:
-              a conversation with me and a review of your safeguarding policies.
+              What hosting a student would involve, and what you would get.
+            </h1>
+            <p className="text-lg leading-relaxed max-w-3xl" style={{ color: c.inkSoft }}>
+              If you run a nonprofit or community organization in the Bay Area and students have come and gone through your doors without leaving much behind, this is written for you. Hosting a student this way costs nothing, and it is also a piece of research, so I want to be plain about both sides of it.
             </p>
           </div>
-          <div className="col-span-12 md:col-span-6 md:col-start-7">
-            <ul className="space-y-5 mt-2">
-              {criteria.map((item) => (
+        </div>
+      </section>
+
+      {/* What I would ask */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              What I would ask of you
+            </div>
+          </div>
+          <div className="col-span-12 md:col-span-8">
+            <ul className="space-y-0">
+              {asks.map((item, i) => (
                 <li
-                  key={item}
-                  className="flex gap-4 text-base leading-relaxed py-5"
+                  key={i}
+                  className="flex gap-6 text-lg leading-relaxed py-8"
                   style={{ borderBottom: `1px solid ${c.line}`, color: c.ink }}
                 >
-                  <span style={{ color: c.accent, flexShrink: 0, fontWeight: 500 }}>—</span>
+                  <span
+                    className="text-xs uppercase pt-1.5 flex-shrink-0"
+                    style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500, width: '2.5rem' }}
+                  >
+                    0{i + 1}
+                  </span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -203,55 +140,56 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section
-        className="px-6 md:px-12 lg:px-20 py-20 md:py-28"
-        style={{ background: c.ink, color: c.bg }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-xs uppercase mb-8" style={{ letterSpacing: '0.28em', color: c.accentSoft, fontWeight: 500 }}>
-            — Become a Partner
+      {/* What you would get */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}`, background: c.bgDeep }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3">
+            <div className="text-xs uppercase md:sticky md:top-24" style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500 }}>
+              What you would get
+            </div>
           </div>
-          <h2
-            className="text-3xl md:text-5xl leading-[1.1] mb-8 max-w-3xl"
-            style={{ fontFamily: serif, fontWeight: 300, letterSpacing: '-0.01em' }}
-          >
-            Interested in hosting a Gateway student?
-          </h2>
-          <p className="text-lg leading-relaxed mb-10 max-w-2xl" style={{ color: '#C9C2B8' }}>
-            Reach out and we&apos;ll set up a 20-minute conversation to see if there&apos;s a fit.
-          </p>
-          <a
-            href="/contact"
-            className="inline-block px-8 py-4 text-xs uppercase tracking-widest"
-            style={{ background: c.accent, color: c.bg, fontWeight: 500, letterSpacing: '0.2em' }}
-          >
-            Get in Touch →
-          </a>
+          <div className="col-span-12 md:col-span-8">
+            <ul className="space-y-0">
+              {gets.map((item, i) => (
+                <li
+                  key={i}
+                  className="flex gap-6 text-lg leading-relaxed py-8"
+                  style={{ borderBottom: `1px solid ${c.line}`, color: c.ink }}
+                >
+                  <span
+                    className="text-xs uppercase pt-1.5 flex-shrink-0"
+                    style={{ letterSpacing: '0.28em', color: c.accent, fontWeight: 500, width: '2.5rem' }}
+                  >
+                    0{i + 1}
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 md:px-12 lg:px-20 py-12" style={{ borderTop: `1px solid ${c.line}` }}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-2xl" style={{ fontFamily: serif, fontWeight: 500 }}>Gateway</span>
-              <span style={{ color: c.accent, fontFamily: serif }}>·</span>
-              <span className="text-xs uppercase" style={{ letterSpacing: '0.22em', color: c.inkSoft, fontWeight: 500 }}>Impact Lab</span>
-            </div>
-            <div className="text-sm mb-3" style={{ color: c.inkSoft }}>San Francisco Bay Area · Cambridge, MA</div>
-            <div className="flex gap-6 text-xs uppercase" style={{ letterSpacing: '0.18em' }}>
-              <a href="/" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Home</a>
-              <a href="/co-design" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Co-design Tool</a>
-              <a href="/contact" className="gw-link" style={{ color: c.inkMuted, fontWeight: 500 }}>Contact</a>
-            </div>
-          </div>
-          <div className="text-xs" style={{ color: c.inkMuted }}>
-            © 2026 Gateway Impact Lab
+      {/* Closing */}
+      <section className="px-6 md:px-12 lg:px-20 py-20 md:py-28" style={{ borderBottom: `1px solid ${c.line}` }}>
+        <div className="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+          <div className="col-span-12 md:col-span-3" />
+          <div className="col-span-12 md:col-span-8 space-y-6">
+            <p className="text-lg leading-relaxed" style={{ color: c.ink }}>
+              If you want to talk it through, email me.
+            </p>
+            <a
+              href="/contact"
+              className="text-base gw-link"
+              style={{ color: c.ink, textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            >
+              Contact me →
+            </a>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <SharedFooter c={c} serif={serif} />
     </div>
   );
 }
